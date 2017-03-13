@@ -1,20 +1,28 @@
 #' Read in a data file or list of files from excel spreadsheets.
 #'
-#' @description This read in file can turn into an S3 class where you read from 
-#' a URL, an excel file, google doc, and a csv.
+#' @description Import, read, and connect patent data files. Currently: xls files
+#' from a filepath. 
+#' Future use: can read from a URL, an xlsx file, google doc, and a csv.
 #'
-#' @param rawDataFilePath A file, or list of files, in xls format. URL in future.
+#' @param rawDataFilePath A filepath, or list of filespaths, for xls files.
 #' @param skipLines Number of lines to skip before reading in your data file.
 #' @return A single data frame of all data. 
-#' @examples
-#' add(1, 1)
-#' add(10, 1)
+#' @examples \dontrun{
+#' 
+#' # access the files here and put them in a data/ folder of your working directory.
+#' file1 <- system.file("extdata", "sumobrain_autonomous_search1.xls", package = "patentr")
+#' file2 <- system.file("extdata", "sumobrain_autonomous_search2.xls", package = "patentr")
+#' 
+#' # assume csv files are in the data folder
+#' ipData <- readPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
+#' }
+#' add(10, 1) # to remove later
 #' 
 #' @export
 #' 
 #' @importFrom readxl read_excel
 #' @importFrom plyr ldply
-readPatentData <- function(rawDataFilePath = NA, skipLines = 1){
+importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
   
   # grep all files that end in "xls". This is a lazy-mans error-check. 
   filePaths <- rawDataFilePath[grep(".*.xls",rawDataFilePath,ignore.case=T)]
