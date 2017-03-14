@@ -34,6 +34,7 @@
 #' \item{appNum}{Application Number}
 #' \item{dateFiled}{Filing Date}
 #' \item{classPrimary}{Primary Class}
+#' \item{classOthers}{Other Classes}
 #' }
 #' 
 #' @seealso \url{http://www.sumobrain.com} You will need to create a free account to export data.
