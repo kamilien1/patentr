@@ -21,6 +21,13 @@ dates changed into date format, and application numbers split into country
 and number data. Data can be read from data exports found on Sumobrain.com, 
 lens.org, and potentially other sources if found to be reproducible and free.
 
+Read data with the following:
+```{r}
+# chooseFiles() screenshot
+# importPatentData() with example 
+```
+
+
 ## Data (Re)Processing  
 The package will also provide tools to allow the munged data 
 to be manually edited in an external tool and re-read into the program. 
