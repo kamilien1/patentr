@@ -67,3 +67,4 @@ chooseFiles <- function() {
   files <- tcltk::tk_choose.files(caption = "Select the file(s) you wish to read")
   files
 }
+

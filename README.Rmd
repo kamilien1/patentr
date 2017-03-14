@@ -11,3 +11,5 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
+
+Introducing `patentr`, the toolkit for patent data analysis in R. 

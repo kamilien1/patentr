@@ -21,6 +21,7 @@
 #' @section patentr functions:
 #' 
 #' \code{\link{importPatentData}}: Import xls patent data from filepaths.
+#' \code{\link{chooseFiles}}: Uses a popup window (Tk file dialog) to allow the user to choose a list of zero or more files interactively.
 #' 
 #' 
 #' @docType package
