@@ -16,7 +16,7 @@
 #' # assume csv files are in the data folder
 #' ipData <- readPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
 #' }
-#' add(10, 1) # to remove later
+#' 
 #' 
 #' @export
 #' 

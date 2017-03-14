@@ -29,6 +29,6 @@ file2 <- system.file("extdata", "sumobrain_autonomous_search2.xls", package = "p
 # assume csv files are in the data folder
 ipData <- readPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
 }
-add(10, 1) # to remove later
+
 
 }

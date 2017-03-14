@@ -16,7 +16,6 @@
 \item{appNum}{Application Number}
 \item{dateFiled}{Filing Date}
 \item{classPrimary}{Primary Class}
-\item{classOther}{Other Class}
 }}
 \usage{
 acars
