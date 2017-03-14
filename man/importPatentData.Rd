@@ -12,7 +12,7 @@ importPatentData(rawDataFilePath = NA, skipLines = 1)
 \item{skipLines}{Number of lines to skip before reading in your data file.}
 }
 \value{
-A single data frame of all data.
+A single data frame of all data. NULL if no data.
 }
 \description{
 Import, read, and connect patent data files. Currently: xls files

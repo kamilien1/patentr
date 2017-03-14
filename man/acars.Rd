@@ -3,7 +3,7 @@
 \docType{data}
 \name{acars}
 \alias{acars}
-\title{Bitly Data}
+\title{Autonomous Vehicle Patent Data}
 \format{A data frame with 499 observations on 10 variables.
 \describe{
 \item{docNum}{Document Number}
@@ -37,5 +37,8 @@ Can get raw data with the following commands:
 \code{system.file("extdata", "sumobrain_autonomous_search1.xls", package = "patentr")}
 
 \code{system.file("extdata", "sumobrain_autonomous_search2.xls", package = "patentr")}
+}
+\seealso{
+\url{http://www.sumobrain.com} You will need to create a free account to export data.
 }
 \keyword{data}

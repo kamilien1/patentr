@@ -1,4 +1,4 @@
-#' Bitly Data
+#' Autonomous Vehicle Patent Data
 #'
 #' An example data set of autonomous vehicle IP from major assignees. 
 #' 
@@ -36,4 +36,7 @@
 #' \item{classPrimary}{Primary Class}
 #' \item{classOther}{Other Class}
 #' }
+#' 
+#' @seealso \url{http://www.sumobrain.com} You will need to create a free account to export data.
+#' 
 "acars"
