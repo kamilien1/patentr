@@ -10,9 +10,12 @@
 #' @examples \dontrun{
 #' 
 #' # access the files here and put them in a data/ folder of your working directory.
-#' file1 <- system.file("extdata", "sumobrain_autonomous_search1.xls", package = "patentr")
-#' file2 <- system.file("extdata", "sumobrain_autonomous_search2.xls", package = "patentr")
+#' file1 <- system.file("extdata/", "sumobrain_autonomous_search1.xls", package="patentr")
+#' file2 <- system.file("extdata/", "sumobrain_autonomous_search2.xls", package="patentr")
+#' files <- list(file1, file2)
+#' ipData <- readPatentData(rawDataFilePath = files, skipLines = 1)
 #' 
+#' # example 2
 #' # assume csv files are in the data folder
 #' ipData <- readPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
 #' }
@@ -33,6 +36,9 @@ importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
   }
   else {
     # use read_excel from the readxl package
+    # note: on xls files the last column might get dropped
+    # a fix was supposed to have worked in Feb 2017
+    # https://github.com/tidyverse/readxl/issues/152
     rawData <- lapply(rawDataFilePath, readxl::read_excel, skip = skipLines)
     
     # clean the data with ldply, unlists data and creates single data frame
@@ -41,4 +47,23 @@ importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
     return(cleanData)
   }
   
+}
+
+
+
+#' Allow the user to navigate to files manually. 
+#' 
+#' @description Uses a popup window (Tk file dialog) to allow the user to choose a list of zero or more files interactively.
+#' 
+#' @return A list of character vectors with absolute pathnames to files.
+#' 
+#' @examples \dontrun{
+#' filePaths <- chooseFiles()
+#' allData <- readIpExcel(filePaths)
+#' }
+#' @export
+#' @importFrom tcltk tk_choose.files
+chooseFiles <- function() {
+  files <- tcltk::tk_choose.files(caption = "Select the file(s) you wish to read")
+  files
 }
