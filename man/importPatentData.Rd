@@ -12,7 +12,7 @@ importPatentData(rawDataFilePath = NA, skipLines = 1)
 \item{skipLines}{Number of lines to skip before reading in your data file.}
 }
 \value{
-A single data frame of all data.
+A single data frame of all data. NULL if no data.
 }
 \description{
 Import, read, and connect patent data files. Currently: xls files
@@ -29,6 +29,6 @@ file2 <- system.file("extdata", "sumobrain_autonomous_search2.xls", package = "p
 # assume csv files are in the data folder
 ipData <- readPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
 }
-add(10, 1) # to remove later
+
 
 }

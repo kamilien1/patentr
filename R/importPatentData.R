@@ -6,7 +6,7 @@
 #'
 #' @param rawDataFilePath A filepath, or list of filespaths, for xls files.
 #' @param skipLines Number of lines to skip before reading in your data file.
-#' @return A single data frame of all data. 
+#' @return A single data frame of all data. NULL if no data. 
 #' @examples \dontrun{
 #' 
 #' # access the files here and put them in a data/ folder of your working directory.
@@ -16,7 +16,7 @@
 #' # assume csv files are in the data folder
 #' ipData <- readPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
 #' }
-#' add(10, 1) # to remove later
+#' 
 #' 
 #' @export
 #' 
@@ -37,7 +37,7 @@ importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
     
     # clean the data with ldply, unlists data and creates single data frame
     cleanData <- plyr::ldply(rawData)
-    print(paste("Successfull loaded in a file with dim:",dim(cleanData)))
+    print(paste("Successfull loaded in a file with",dim(cleanData)[1], "rows and",dim(cleanData)[2],"columns."))
     return(cleanData)
   }
   
