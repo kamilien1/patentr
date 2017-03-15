@@ -9,7 +9,8 @@ License: GPL (> 2)
 Encoding: UTF-8
 LazyData: true
 Imports: readxl (>= 0.1.1),
-	plyr (>= 1.8.4)
+	plyr (>= 1.8.4),
+	stringr (>= 1.2.0)
 Suggests: testthat,
 	rprojroot
 Remotes: tidyverse/readxl
