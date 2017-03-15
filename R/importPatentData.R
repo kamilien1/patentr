@@ -62,10 +62,16 @@ importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
 #' allData <- readIpExcel(filePaths)
 #' }
 #' @export
-#' 
+
+
+
 chooseFiles <- function() {
+  ## Note: adding in @importFrom tcltk tk_choose.files breaks the build
+  # on linux machines, it may be for the reason below (tcltk may not be installed
+  # on some R builds)
   # http://r.789695.n4.nabble.com/Where-is-the-tcltk-package-td3434915.html
   # apparently do not need to necessarily include tcltk in Depends
+  
   files <- tcltk::tk_choose.files(caption = "Select the file(s) you wish to read")
   files
 }
