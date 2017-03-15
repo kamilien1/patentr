@@ -1,0 +1,1 @@
+citHeader("To cite patentr in publications, use:")citEntry(  textVersion  =  paste("Kamil Bojanczyk, Yao Yang (2017).",        "patentr: A patent analysis toolkit in R.",        "URL https://github.com/kamilien1/patentr"))

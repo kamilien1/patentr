@@ -1,0 +1,136 @@
+---
+title: "patentr"
+author: "Kamil Bojanczyk; Yao Yang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{patentr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+The package is a data processing and reporting tool of patent data sets for 
+patent analysts.
+
+## Data Input and Cleaning
+You can read in patent data files from 
+publicly available sources and clean the data into a more useful, 
+usable format for further analysis. For example, names are standardized,
+dates changed into date format, and application numbers split into country
+and number data. Data can be read from data exports found on Sumobrain.com, 
+lens.org, and potentially other sources if found to be reproducible and free.
+
+Read data with the following:
+```{r}
+# chooseFiles() screenshot
+# importPatentData() with example 
+```
+
+
+## Data (Re)Processing  
+The package will also provide tools to allow the munged data 
+to be manually edited in an external tool and re-read into the program. 
+Such reprocessing may include verifying assignee names, adding category 
+labels, scoring patent quality by various user-defined metrics. Currently,
+the method is to export the clean data as a .csv file, manually edit the files
+in Google Spreadsheets, and then re-read the program back into R for data
+exploration, visualization, and reporting. If time permits, a better 
+classification method will be attempted. 
+
+## Data Exploration & Visualization
+The package will also allow the user to quickly explore patent trends from the
+command line. These trends include simple summary functions, graphics, 
+and if time permits, a Shiny dashboard to allow the user to manually summarize 
+data into tables and simple graphs. Visualizations are also a part of this step,
+however, are more applicable to reporting and thus are discussed in the next
+section.
+
+
+## Visualization & Reporting
+The package will also allow the user to output a set of pre-defined plots and 
+summary information. Plots may include patent count by assignee, number of 
+live applications, total patent count by category, and other interesting 
+visualizations. Visualizations will utilize the ggplot package to represent 
+highly specific plots that convey a story of the patenting strategy and trends 
+of companies and industries. Plots will include patent quality over time, 
+patents by jurisdiction, and invention diversity by classification. 
+
+
+## Audience & Purpose
+
+This package design is inspired by one of the author's work with intellectual
+property. Current tools available cost thousands of dollars to use and offer 
+outdated or not useful charting features. The authors feel it would beneficial 
+to the IP community to have the same quality analysis tools available for free. 
+
+The authors are motivated from lens.org, a site that provides basic access to 
+patent resources for free, and they are collaborting with the group as part of 
+a larger initiative outside the scope of this class project. Most patent 
+analysts run out of time and skill before they can properly analyze portfolios.
+This project will address that problem by providing deep insights for free.
+
+The package is aimed at patent agents, lawyers, managers, analysts, and 
+academics who are working on patents. This may be used in a patent landscape 
+analysis, company IP portfolio analysis, or a freedom to operate search. 
+
+
+A chief intellectual property officer will use this tool to map the landscape 
+of her competitors. She will use the reporting feature to quickly see the 
+patent areas of concern, and see how many applications she needs to analyze.
+
+A technology transfer office will use this to generate a landscape of a 
+technology field. He will ues this to get rough guidelines for who he should 
+be targeting to license a university technology.
+
+An academic will use this tool to deeply analyze trends in patents over time.
+
+
+
+Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+
+- Never uses retina figures
+- Has a smaller default figure size
+- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+
+## Vignette Info
+
+Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
