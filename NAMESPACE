@@ -3,6 +3,7 @@
 export(chooseFiles)
 export(cleanSumobrainNames)
 export(extractCountryCode)
+export(extractDocLength)
 export(extractKindCode)
 export(extractPubNumber)
 export(importPatentData)

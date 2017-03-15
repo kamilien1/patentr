@@ -122,3 +122,46 @@ extractKindCode <- function(docNum) {
   kindCode[is.na(kindCode)] <- ''
   return(kindCode)
 }
+
+
+#' Get a code for length of doc and country code
+#' 
+#' @description Generate a custom concatenation of country code and length of 
+#' the publication number, for document type identification purposes. 
+#' 
+#' Given limited metadata available on free sites, often times the downloaded
+#' data set does not include the type of patent document. There are two easy ways to 
+#' discover the type of a patent document. A dictionary stored with the 
+#' package can compare the output to match up the type of patent document. 
+#' 
+#' \enumerate{
+#' \item The kind code, if present, is typically the same for each country.
+#' \code{B} is usually a patent and \code{A} is usually an application.
+#' \item The length of the publication number, along with the country code, is 
+#' another great indicator. Applications in USA have 11 numbers, and, for now,
+#' 9 numbers for granted patents.
+#' }
+#' 
+#' @param countryCode A string vector of country codes
+#' @param pubNum A string vector of the numeric portion of a publication number.
+#' 
+#' @return A string vector of concatenated country code and publication number 
+#' length, such as US11 or EP9. 
+#' 
+#' @examples 
+#' acars$pubNum <- extractPubNumber(acars$docNum)
+#' acars$countryCode <- extractCountryCode(acars$docNum)
+#' acars$officeDocLength <- extractDocLength(countryCode = acars$countryCode,
+#' pubNum = acars$pubNum)
+#' head(acars[,c("officeDocLength","docNum")])
+#' 
+#' @export
+#' 
+extractDocLength <- function(countryCode, pubNum) {
+  # make a concat of length of document and country code to figure out
+  # what type of document it is, in general (patent, app, reissue, or design)
+  officeLength <- paste(countryCode, nchar(pubNum),sep='')
+  officeLength    
+  
+}
+
