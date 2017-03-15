@@ -28,6 +28,30 @@ Read data with the following:
 ```
 
 
+Clean data uses `extract` functions that take in character vectors and return 
+extracted metadata useful in patent data analysis. A master cleaner function
+bundles all these functions together. The user also has the ability to use the 
+functions one-by-one for custom analysis. 
+
+Clean data with the following functions:
+
+Name processing:
+
+ * cleanSumobrainNames
+
+Metadata extractions:
+
+ * extractCountryCode
+ * extractPubNumber
+ * extractKindCode
+ * extractDocLength
+
+```{r}
+
+```
+
+
+
 ## Data (Re)Processing  
 The package will also provide tools to allow the munged data 
 to be manually edited in an external tool and re-read into the program. 

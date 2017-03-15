@@ -33,3 +33,15 @@ test_that("Kind code extracted returns same length as number of rows of data fra
   # should return the same length
   expect_length(extractKindCode(df$docNum),dim(df)[1])
 })
+
+
+# same length when extracting kind code
+test_that("Office doc length extracted returns same length as number of rows of data frame",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanSumobrainNames(sumobrainData = df)
+  df$pubName <- extractPubNumber(df$docNum)
+  df$countryCode <- extractCountryCode(df$docNum)
+  df$officeDocLength <- extractDocLength(countryCode = df$countryCode, pubNum = df$pubNum)
+  # should return the same length
+  expect_length(df$officeDocLength ,dim(df)[1])
+})
