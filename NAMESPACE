@@ -2,7 +2,9 @@
 
 export(chooseFiles)
 export(cleanSumobrainNames)
+export(extractCountryCode)
 export(importPatentData)
 importFrom(plyr,ldply)
 importFrom(readxl,read_excel)
+importFrom(stringr,str_extract)
 importFrom(tcltk,tk_choose.files)

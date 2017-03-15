@@ -34,3 +34,32 @@ cleanSumobrainNames <- function(sumobrainData = NA, columnsExpected = 11,
   }
   return(sumobrainData)
 }
+
+
+#' Extract the country code from a vector string of document numbers.
+#' 
+#' @description Extract the country code from a patent document number, which is the 
+#' first two to four letters in a patent document number.
+#' 
+#' For example, if a patent number is US8880270, the country code is US. In rare
+#' cases, we have more than two letters. Typical country codes are US (United States),
+#' EP (Europe), JP (Japan), and WO (World, meaning a PCT application). 
+#' 
+#' @param docNum The character vector of document numbers. 
+#' 
+#' @return A character vector of the same lenght inputted, with 2-4 characters
+#' representing the country code of the ptaent document.
+#' 
+#' @importFrom stringr str_extract
+#' 
+#' @examples 
+#' # create a new column called countryCode in the acars data set
+#' acars$countryCode <- extractCountryCode(acars$docNum)
+#' head(acars[,c("docNum","countryCode")])
+#' 
+#' @export
+#' 
+extractCountryCode <- function(docNum) {
+  # use the stringr package str_extract    
+  stringr::str_extract(docNum, "^[A-Z]{0,4}")
+}
