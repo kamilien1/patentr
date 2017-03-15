@@ -3,6 +3,7 @@
 export(chooseFiles)
 export(cleanSumobrainNames)
 export(extractCountryCode)
+export(extractKindCode)
 export(extractPubNumber)
 export(importPatentData)
 importFrom(plyr,ldply)

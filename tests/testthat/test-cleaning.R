@@ -24,3 +24,12 @@ test_that("Publication number, numeric portion extracted from document number pr
   # should return the same length
   expect_length(extractPubNumber(df$docNum),dim(df)[1])
 })
+
+
+# same length when extracting kind code
+test_that("Kind code extracted returns same length as number of rows of data frame",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanSumobrainNames(sumobrainData = df)
+  # should return the same length
+  expect_length(extractKindCode(df$docNum),dim(df)[1])
+})

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanPatentData.R
 \name{extractPubNumber}
 \alias{extractPubNumber}
-\title{Extract the numeric portion of the publication number.}
+\title{Extract the numeric portion of the document (published) number.}
 \usage{
 extractPubNumber(docNum)
 }
@@ -15,7 +15,7 @@ Typical lengths are 7 to 11 characters. Only numbers are returned. All other
 characters are stripped.
 }
 \description{
-Extract the numeric portion of the publication number. 
+Extract the numeric portion of the document number. 
 This is useful for a number of processing applications, and thus is beneficial
 to isolate from the entire publication number.
 }

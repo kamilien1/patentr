@@ -65,9 +65,9 @@ extractCountryCode <- function(docNum) {
 }
 
 
-#' Extract the numeric portion of the publication number.
+#' Extract the numeric portion of the document (published) number.
 #' 
-#' @description Extract the numeric portion of the publication number. 
+#' @description Extract the numeric portion of the document number. 
 #' This is useful for a number of processing applications, and thus is beneficial
 #' to isolate from the entire publication number. 
 #' 
@@ -85,6 +85,8 @@ extractCountryCode <- function(docNum) {
 #' @export
 #' 
 extractPubNumber <- function(docNum) {
+  # may change to extractDocNumber for consistency
+  # note that the doc number is the PUBLISHED doc number, hence, pubNum
   # WO applications come with backslash, remove it
   pubNum <- gsub('/','', docNum)
   # get rid of country code
@@ -93,3 +95,30 @@ extractPubNumber <- function(docNum) {
   pubNum <- gsub("*[A-Z][0-9]$",'', pubNum)
   return(pubNum)
 } 
+
+
+#' Extract the kind code, if available, from the publication number.
+#' 
+#' @description Extracts the kind code, a one-to-two character code with a letter and 
+#' typically a number, if found in the document (published) number. 
+#' 
+#' @param docNum The character vector of document numbers. 
+#' 
+#' @return A character vector of kind codes. If none found, a blank character is returned.
+#' 
+#' @examples 
+#' acars$kindCode <- extractKindCode(acars$docNum)
+#' head(acars[,c("docNum","kindCode")]) 
+#'   
+#' @importFrom stringr str_extract
+#' 
+#' @export
+#'
+extractKindCode <- function(docNum) {
+  
+  # get a letter and a number at the end of a string
+  kindCode <- stringr::str_extract(docNum, "[A-Z][0-9]{0,1}$")
+  # and remove the NA values
+  kindCode[is.na(kindCode)] <- ''
+  return(kindCode)
+}
