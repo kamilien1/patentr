@@ -3,6 +3,7 @@
 export(chooseFiles)
 export(cleanSumobrainNames)
 export(extractCountryCode)
+export(extractPubNumber)
 export(importPatentData)
 importFrom(plyr,ldply)
 importFrom(readxl,read_excel)

@@ -47,7 +47,7 @@ cleanSumobrainNames <- function(sumobrainData = NA, columnsExpected = 11,
 #' 
 #' @param docNum The character vector of document numbers. 
 #' 
-#' @return A character vector of the same lenght inputted, with 2-4 characters
+#' @return A character vector of the same length inputted, with 2-4 characters
 #' representing the country code of the ptaent document.
 #' 
 #' @importFrom stringr str_extract
@@ -63,3 +63,33 @@ extractCountryCode <- function(docNum) {
   # use the stringr package str_extract    
   stringr::str_extract(docNum, "^[A-Z]{0,4}")
 }
+
+
+#' Extract the numeric portion of the publication number.
+#' 
+#' @description Extract the numeric portion of the publication number. 
+#' This is useful for a number of processing applications, and thus is beneficial
+#' to isolate from the entire publication number. 
+#' 
+#' @param docNum The character vector of document numbers. 
+#' 
+#' @return A character vector of same length inputted, with varying length. 
+#' Typical lengths are 7 to 11 characters. Only numbers are returned. All other
+#' characters are stripped. 
+#' 
+#' @examples 
+#' acars$pubNum <- extractPubNumber(acars$docNum)
+#' head(acars[,c("docNum","pubNum")]) 
+#'   
+#'  
+#' @export
+#' 
+extractPubNumber <- function(docNum) {
+  # WO applications come with backslash, remove it
+  pubNum <- gsub('/','', docNum)
+  # get rid of country code
+  pubNum <-  gsub("^[A-Z]{0,4}",'',pubNum)
+  # get rid of kind code
+  pubNum <- gsub("*[A-Z][0-9]$",'', pubNum)
+  return(pubNum)
+} 

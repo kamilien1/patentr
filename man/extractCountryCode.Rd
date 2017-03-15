@@ -10,7 +10,7 @@ extractCountryCode(docNum)
 \item{docNum}{The character vector of document numbers.}
 }
 \value{
-A character vector of the same lenght inputted, with 2-4 characters
+A character vector of the same length inputted, with 2-4 characters
 representing the country code of the ptaent document.
 }
 \description{
