@@ -45,3 +45,13 @@ test_that("Office doc length extracted returns same length as number of rows of 
   # should return the same length
   expect_length(df$officeDocLength ,dim(df)[1])
 })
+
+
+# Dates converted properly
+test_that("Dates converted properly from characters",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanSumobrainNames(sumobrainData = df)
+  df$pubDate <- extractCleanDate(df$pubDate)
+  # should return the same length
+  expect_equal(inherits(df$pubDate, "Date") ,TRUE)
+})

@@ -2,11 +2,13 @@
 
 export(chooseFiles)
 export(cleanSumobrainNames)
+export(extractCleanDate)
 export(extractCountryCode)
 export(extractDocLength)
 export(extractKindCode)
 export(extractPubNumber)
 export(importPatentData)
+importFrom(lubridate,parse_date_time)
 importFrom(plyr,ldply)
 importFrom(readxl,read_excel)
 importFrom(stringr,str_extract)

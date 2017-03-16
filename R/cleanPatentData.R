@@ -165,3 +165,34 @@ extractDocLength <- function(countryCode, pubNum) {
   
 }
 
+
+#' Format patent dates.
+#' 
+#' @description Create a clean year, month, day date.
+#' 
+#' Reading data in and aout of R may cause date mistakes, using a simple set
+#' function will ensure data types are the right format and class type. This 
+#' data format is cleaned up to be in the format yyyy-mm-dd with no hours,
+#' minutes, seconds, or time zone attached. 
+#' 
+#' @param dateVector A vector of character dates.
+#' @param orders The orders the dates appear in. 
+#' 
+#' @importFrom lubridate parse_date_time
+#' 
+#' @return A date vector of year, month, day dates. 
+#' 
+#' @examples 
+#' acars$pubDate <- extractCleanDate(dateVector = acars$pubDate, orders = "ymd")
+#' 
+#' 
+#' @export
+#' 
+extractCleanDate <- function(dateVector, orders="ymd"){
+  
+  # use lubridate to ensure all dates are proper
+  # get the order and then get rid of the UTC by
+  # converting it with as.Date
+  as.Date(lubridate::parse_date_time(dateVector, orders=orders))
+  
+}

@@ -1,7 +1,7 @@
 Package: patentr
 Title: A Toolbox for Analyzing Patent Data
 Version: 0.0.0.9000
-Authors@R: c(person("Bojanczyk", "Kamil", email = "kamil@gridtechip.com", role = c("aut", "cre")),
+Authors@R: c(person("Bojanczyk", "Kamil", email = "kamil.bojanczyk@gmail.com", role = c("aut", "cre")),
     person("Yang", "Yao", email = "yangyaonju@gmail.com", role = "aut"))
 Description: This package is a toolkit for patent data analysis. 
 Depends: R (>= 3.3.2)
@@ -10,7 +10,8 @@ Encoding: UTF-8
 LazyData: true
 Imports: readxl (>= 0.1.1),
 	plyr (>= 1.8.4),
-	stringr (>= 1.2.0)
+	stringr (>= 1.2.0),
+	lubridate (>= 1.6.0)
 Suggests: testthat,
 	rprojroot
 Remotes: tidyverse/readxl
