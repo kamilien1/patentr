@@ -55,3 +55,16 @@ test_that("Dates converted properly from characters",{
   # should return the same length
   expect_equal(inherits(df$pubDate, "Date") ,TRUE)
 })
+
+# same length when extracting kind code
+test_that("Google URL vector returns same length as number of rows of data frame",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanSumobrainNames(sumobrainData = df)
+  df$pubNum <- extractPubNumber(df$docNum)
+  df$countryCode <- extractCountryCode(df$docNum)
+  df$kindCode <- extractKindCode(df$docNum)
+  # should return the same length
+  expect_length(createGoogleURL(countryCode = df$countryCode, 
+                                pubNum = df$pubNum, 
+                                kindCode =df$kindCode) ,dim(df)[1])
+})

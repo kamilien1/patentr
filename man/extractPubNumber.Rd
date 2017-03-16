@@ -23,5 +23,7 @@ to isolate from the entire publication number.
 acars$pubNum <- extractPubNumber(acars$docNum)
 head(acars[,c("docNum","pubNum")]) 
   
- 
+}
+\seealso{
+\code{\link{createGoogleURL}}
 }

@@ -2,6 +2,7 @@
 
 export(chooseFiles)
 export(cleanSumobrainNames)
+export(createGoogleURL)
 export(extractCleanDate)
 export(extractCountryCode)
 export(extractDocLength)

@@ -81,6 +81,7 @@ extractCountryCode <- function(docNum) {
 #' acars$pubNum <- extractPubNumber(acars$docNum)
 #' head(acars[,c("docNum","pubNum")]) 
 #'   
+#' @seealso \code{\link{createGoogleURL}}
 #'  
 #' @export
 #' 
@@ -196,3 +197,47 @@ extractCleanDate <- function(dateVector, orders="ymd"){
   as.Date(lubridate::parse_date_time(dateVector, orders=orders))
   
 }
+
+
+
+#' Create a URL link to Google patents. 
+#' 
+#' @description Create a URL string to link you to Google Patents. 
+#' 
+#' By concatenating the country code, publication number, and kind code, you can
+#' generate a URL to link you to google patents for further exploration. This 
+#' feature is especially useful when browsing the data in a spreadsheet or in 
+#' a Shiny app. It is also useful for extracting data from the HTML content. 
+#' 
+#' As each website (Google, lens.org, sumobrain.com, etc..) has a different 
+#' method for generating patent URLs, these functions are website-specific. 
+#' 
+#' The original Google patents version still works as of March 2017 and the 
+#' \code{googleURL} value is  \code{https://www.google.com/patents/}. This older 
+#' version may be easier to extract data. 
+#' 
+#' @param countryCode A character vector of the country code of the document. 
+#' Typically a two-letter character. 
+#' @param pubNum A character vector of the numeric portion of a publication number.
+#' @param kindCode character vector of the kind code of a document. If not available,
+#' enter a blank string "".
+#' @param googleURL A character string of the URL to Google Patents, with working
+#' default value. 
+#' 
+#' @return A character vector of properly formatted URL strings. 
+#' 
+#' @examples 
+#' acars$kindCode <- extractKindCode(acars$docNum)
+#' acars$pubName <- extractPubNumber(acars$docNum)
+#' acars$googleURL <- createGoogleURL(countryCode = acars$countryCode, 
+#' pubNum = acars$pubNum, kindCode =acars$kindCode)
+#' head(acars$googleURL)
+#' 
+#' @export
+createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://patents.google.com/patent/"){
+  # create the URL 
+  paste(googleURL, countryCode, pubNum, kindCode,  sep='')  
+  # TODO: validate the URL
+  # http://stackoverflow.com/questions/28527100/check-if-https-hypertext-transfer-protocol-secure-url-is-valid
+}
+
