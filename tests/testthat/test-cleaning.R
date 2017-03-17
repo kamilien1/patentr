@@ -79,3 +79,11 @@ test_that("Removing dups is a logical vector",{
 })
 
 
+# duplicates are shown
+test_that("Showing all duplicates and showDups is a logical vector",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanSumobrainNames(sumobrainData = df)
+  # should be of type logical
+  expect_type(showDups(df$appNum) ,"logical")
+})
+

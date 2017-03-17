@@ -254,18 +254,22 @@ createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://
 #' a wrapper function of the \code{\link[base]{duplicated}} function, 
 #' applied to a dataframe or vector. 
 #' 
+#' For example, if you have the vector [US123, US123, US456], you will get the value 
+#' TRUE FALSE TRUE and the duplicate value is removed. 
+#' 
 #' @param input A vector or a data frame which you wish to remove duplicate values. 
 #' 
-#' @return A logical vector of TRUE / FALSE values indicating which elements are 
-#' duplciates. 
+#' @return A logical vector of TRUE / FALSE values indicating with one TRUE value 
+#' per duplicate (two or more identical) values. 
 #' 
 #' @examples 
 #' 
 #' acars <- acars[removeDups(acars$docNum),]
+#' head(removeDups(acars$docNum))
 #' 
 #' @export
 #' 
-#' @seealso \code{\link[base]{duplicated}}
+#' @seealso \code{\link[base]{duplicated}}, \code{\link{showDups}}
 #'
 removeDups <- function(input){
   
@@ -283,3 +287,43 @@ removeDups <- function(input){
   # where other column values have data missing, such as the abstract. 
   !duplicated(input)
 }
+
+
+#' View all your duplicate entries to decide which to remove.
+#' 
+#' @description Return a logical vector of all duplicate entries. 
+#' 
+#' Often times, you want to review your duplicate results to determine which 
+#' rows you want to keep and which you want to erase. 
+#' 
+#' For example, if you have 
+#' an application number that is an application, and another that is a search report, 
+#' then you will want to keep the application data and remove the search report 
+#' entry. 
+#' 
+#' Or, if you have an application number that has both a grant and an 
+#' application entry, you may want to remove the application from your analysis 
+#' and focus on the grant data, as the claim scope is most important for the 
+#' granted patent. 
+#' 
+#' @param input A vector or a data frame which you wish to view duplicated values. 
+#' 
+#' @return A logical vector of TRUE / FALSE with all entries that contain two 
+#' or more duplicate values. 
+#' 
+#' @examples 
+#' 
+#' acarsDups <- acars[showDups(acars$appNum),]
+#' head(acarsDups[order(acarsDups$appNum),c("docNum","docType","appNum")])
+#' 
+#' @export
+#' 
+#' @seealso \code{\link[base]{duplicated}}, \code{\link{removeDups}}
+#'
+showDups <- function(input){
+  
+  # return all dups
+  duplicated(input) | duplicated(input, fromLast=T)  
+}
+
+

@@ -10,8 +10,8 @@ removeDups(input)
 \item{input}{A vector or a data frame which you wish to remove duplicate values.}
 }
 \value{
-A logical vector of TRUE / FALSE values indicating which elements are 
-duplciates.
+A logical vector of TRUE / FALSE values indicating with one TRUE value 
+per duplicate (two or more identical) values.
 }
 \description{
 Remove duplicate values in the patent data. Typically you will 
@@ -21,13 +21,17 @@ data set should be avoided.
 
 Often times, your data sets contain duplicate patent entries. This function is 
 a wrapper function of the \code{\link[base]{duplicated}} function, 
-applied to a dataframe or vector.
+applied to a dataframe or vector. 
+
+For example, if you have the vector [US123, US123, US456], you will get the value 
+TRUE FALSE TRUE and the duplicate value is removed.
 }
 \examples{
 
 acars <- acars[removeDups(acars$docNum),]
+head(removeDups(acars$docNum))
 
 }
 \seealso{
-\code{\link[base]{duplicated}}
+\code{\link[base]{duplicated}}, \code{\link{showDups}}
 }
