@@ -68,3 +68,14 @@ test_that("Google URL vector returns same length as number of rows of data frame
                                 pubNum = df$pubNum, 
                                 kindCode =df$kindCode) ,dim(df)[1])
 })
+
+
+# duplicates are removed if exist
+test_that("Removing dups is a logical vector",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanSumobrainNames(sumobrainData = df)
+  # should be of type logical
+  expect_type(removeDups(df$docNum) ,"logical")
+})
+
+

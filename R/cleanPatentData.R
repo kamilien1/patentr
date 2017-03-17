@@ -241,3 +241,45 @@ createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://
   # http://stackoverflow.com/questions/28527100/check-if-https-hypertext-transfer-protocol-secure-url-is-valid
 }
 
+
+
+#' Remove duplicate values in a patent data set. 
+#' 
+#' @description Remove duplicate values in the patent data. Typically you will 
+#' want to check if you have repeat document numbers. A document number should be 
+#' a unique number in your dataset, thus, having a duplicate document number in your 
+#' data set should be avoided. 
+#' 
+#' Often times, your data sets contain duplicate patent entries. This function is 
+#' a wrapper function of the \code{\link[base]{duplicated}} function, 
+#' applied to a dataframe or vector. 
+#' 
+#' @param input A vector or a data frame which you wish to remove duplicate values. 
+#' 
+#' @return A logical vector of TRUE / FALSE values indicating which elements are 
+#' duplciates. 
+#' 
+#' @examples 
+#' 
+#' acars <- acars[removeDups(acars$docNum),]
+#' 
+#' @export
+#' 
+#' @seealso \code{\link[base]{duplicated}}
+#'
+removeDups <- function(input){
+  
+  # return all the unique doc numbers
+  # or if there are any with 2 or greater, cut those out
+  dupsVector <- duplicated(input)
+  if (sum(dupsVector) >0){
+    print(paste("Removing",sum(dupsVector), "duplicates."))
+  } else{
+    print("No duplicates found.")
+  }
+  
+  # return the values that are not duplicated
+  # Note: this is unordered and you may have some duplicated patent data
+  # where other column values have data missing, such as the abstract. 
+  !duplicated(input)
+}
