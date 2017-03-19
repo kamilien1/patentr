@@ -1,38 +1,69 @@
-#' Generate a standard set of header names for Sumobrain import data
+#' Generate a standard set of header names for import data
 #' 
 #' @description Create a standard nameset from Sumobrain import data. 
 #' See \code{\link{acars}} for the name set.
+#' 
+#' There are three main sources of free and exportable patent data from the internet: 
+#' \enumerate{
+#' \item{\href{www.sumobrain.com}{Sumobrain}}
+#' \item{\href{www.lens.org}{The Lens}}
+#' \item{\href{www.patents.google.com}{Google}}
+#' }
+#' 
+#' These three popular sites have varying levels of exportable data available. 
+#' Sumobrain tends to be the most comprehensive, followed by Lens, and finally 
+#' by Google. Thus, all three have hardcoded data available in the \code{patentr} 
+#' package. 
 #' 
 #' To download Sumobrain data, go to \url{http://www.sumobrain.com} and create a free
 #' account. Then run your search, export the data (250 max at a time), and use the 
 #' \code{\link{chooseFiles}} and \code{\link{importPatentData}} functions to load
 #' the data into R. 
 #' 
-#' @param sumobrainData A data frame 11 columns wide, imported from sumobrain.com.
-#' @param columnsExpected A sumobrain export has 11 columns. In case their export changes,
-#' you can modify the value.
-#' @param cleanNames A standard list of clean names. 
+#' To download Lens data, go to \url{www.lens.org}. You do not need to create an 
+#' account. Run your search, and in the header section, look for the cloud icon 
+#' with a downward arrow. Choose the CSV option. 
+#' 
+#' To download Google patent data, visit \url{www.patents.google.com}, run 
+#' your search, and click "Download (CSV)" in the upper left-hand corner. 
+#' 
+#' @param patentData A data frame. Default is NA.
+#' @param columnsExpected An expected number of columns. 
+#' Default is Sumobrain \code{\link{sumobrainColumns}} data.
+#' @param cleanNames A standard list of clean names. Default is Sumobrain 
+#' \code{\link{sumobrainNames}} data.
 #' 
 #' @return A data frame 11 columns wide, with standard column names used in other
 #' functions. 
 #' 
 #' @examples
-#' cleanData <- cleanSumobrainNames(sumobrainData = acars)
+#' cleanData <- cleanHeaderNames(patentData = acars)
 #' 
 #' @export
 #' 
-cleanSumobrainNames <- function(sumobrainData = NA, columnsExpected = 11,
-                                    cleanNames = c("docNum", "docType","pubDate",
-                                                   "title","abstract","inventors",
-                                                   "assignee","appNum","dateFiled",
-                                                   "classPrimary","classOthers")){
+#' @seealso \enumerate{
+#' \item{\code{\link{sumobrainColumns}}}
+#' \item{\code{\link{sumobrainNames}}}
+#' \item{\code{\link{skipSumobrain}}}
+#' \item{\code{\link{googleColumns}}}
+#' \item{\code{\link{googleNames}}}
+#' \item{\code{\link{skipGoogle}}}
+#' \item{\code{\link{lensColumns}}}
+#' \item{\code{\link{lensNames}}}
+#' \item{\code{\link{skipLens}}}
+#' }
+#' 
+#' 
+cleanHeaderNames <- function(patentData = NA, columnsExpected = patentr::sumobrainColumns,
+                                    cleanNames = patentr::sumobrainNames){
   
-  # sumobrain exports have 11 columns
-  if(is.data.frame(sumobrainData) && dim(sumobrainData)[2] == columnsExpected &&
+  # check to make sure dataframe is the appropriate width and the names 
+  # fit the width
+  if(is.data.frame(patentData) && dim(patentData)[2] == columnsExpected &&
      length(cleanNames)==columnsExpected){
-    names(sumobrainData) <- cleanNames
+    names(patentData) <- cleanNames
   }
-  return(sumobrainData)
+  return(patentData)
 }
 
 

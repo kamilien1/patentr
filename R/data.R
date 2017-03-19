@@ -100,23 +100,256 @@
 #' 
 "docLengthTypes"
 
-#' #' Data description
-#' #'
-#' #' A longer description
-#' #' 
-#' #' 
-#' #' @name data_name_to_replace
-#' #' @docType data
-#' #' @keywords data
-#' #' 
-#' #' 
-#' #' @format 
-#' #' 
-#' #' \describe{
-#' #' \item{}{}
-#' #' 
-#' #' }
-#' #' 
-#' #' @seealso 
-#' ""
+#' Header names for a data upload sourced from sumobrain.com
+#'
+#' A character vector to standardize the headers of the imported excel from a 
+#' sumobrain.com patent data export.
+#'
+#' Used with \code{\link{acars}} data.
+#'
+#' @name sumobrainNames
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector
+#'
+#' \describe{
+#' \item{sumobrainNames}{An 11-element character vector of clean sumobrain names.}
+#'
+#' }
+#'
+#' @seealso Go to \href{www.sumobrain.com}{Sumobrain}, create a free account, and 
+#' download the data.
+#' 
+#' \code{\link{skipGoogle}}, \code{\link{skipLens}}, \code{\link{skipSumobrain}},
+#' \code{\link{googleColumns}},\code{\link{lensColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{lensNames}}, \code{\link{googleNames}}
+#'   
+"sumobrainNames"
+
+
+#' The number of columns in a sumobrain.com data export.
+#'
+#' A convenient hard-coded value that can be used when reading in sumobrain.com 
+#' exported patent data files.
+#'
+#' Used with \code{\link{acars}} data.
+#'
+#' @name sumobrainColumns
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A numeric value.
+#'
+#' \describe{
+#' \item{sumobrainColumns}{A hard-coded numeric value for the number of columns in a 
+#' sumobrain.com data export.}
+#'
+#' }
+#'
+#' @seealso
+#' \code{\link{skipGoogle}}, \code{\link{skipLens}}, \code{\link{skipSumobrain}},
+#' \code{\link{googleColumns}},\code{\link{lensColumns}},
+#' \code{\link{sumobrainNames}}, \code{\link{lensNames}}, \code{\link{googleNames}}
+#' 
+"sumobrainColumns"
+
+#' The number of lines to skip in a data read for a sumobrain.com export file.
+#'
+#' The number of lines to skip in a data read for a sumobrain.com export file.
+#' Used with \code{\link{acars}} data.
+#'
+#'
+#' @name skipSumobrain
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A numeric value.
+#'
+#' \describe{
+#' \item{skipSumobrain}{A hard-coded numeric value for how many lines to skip 
+#' in a sumobrain.com data export.}
+#'
+#' }
+#' @seealso
+#' \code{\link{skipGoogle}}, \code{\link{skipLens}}, 
+#' \code{\link{googleColumns}},\code{\link{lensColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{sumobrainNames}}, \code{\link{lensNames}}, \code{\link{googleNames}}
+#'
+#' 
+"skipSumobrain"
+
+
+
+#' Header names for a data upload sourced from Google Patents data exports.
+#'
+#' A character vector to standardize the headers of the imported csv from a 
+#' Google Patents patent data export. Used with \code{\link{acarsGoogle}} data.
+#'
+#'
+#' @name googleNames
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector.
+#'
+#' \describe{
+#' \item{googleNames}{A 9-element character vector of clean Google patent names.}
+#'
+#' }
+#'
+#' @seealso Go to \href{patents.google.com}{Google Patents} to download the data.
+#' 
+#' \code{\link{skipGoogle}}, \code{\link{skipLens}}, \code{\link{skipSumobrain}},
+#' \code{\link{googleColumns}},\code{\link{lensColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{sumobrainNames}}, \code{\link{lensNames}}
+#'
+"googleNames"
+
+
+#' Number of columns in Google Patents export data.
+#'
+#' The number of columns in a Google Patents CSV export.
+#' 
+#' Used with \code{\link{acarsGoogle}} data.
+#'
+#'
+#' @name googleColumns
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A numeric value.
+#'
+#' \describe{
+#' \item{googleColumns}{A numeric value of number of columns in a csv export from 
+#' Google Patents.}
+#'
+#' }
+#'
+#' @seealso
+#' 
+#' \code{\link{skipGoogle}}, \code{\link{skipLens}}, \code{\link{skipSumobrain}},
+#' \code{\link{lensColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{sumobrainNames}}, \code{\link{lensNames}}, \code{\link{googleNames}}
+#' 
+"googleColumns"
+
+#' How many lines to skip in a Google Patents CSV export file.
+#'
+#' A hard-coded value for the number of lines to skip in a Google Patents csv 
+#' export.
+#'
+#' Used with \code{\link{acarsGoogle}} data.
+#'
+#' @name skipGoogle
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A numeric value.
+#'
+#' \describe{
+#' \item{skipGoogle}{A numeric value for number of lines to skip in a Google 
+#' Patents csv export.}
+#'
+#' }
+#'
+#' @seealso
+#' 
+#' \code{\link{skipLens}}, \code{\link{skipSumobrain}},
+#' \code{\link{googleColumns}},\code{\link{lensColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{sumobrainNames}}, \code{\link{lensNames}}, \code{\link{googleNames}}
+#' 
+"skipGoogle"
+
+
+#' Header names for a data upload sourced from lens.org.
+#'
+#' A character vector to standardize the headers of the imported csv from a 
+#' lens.org patent data export.
+#'
+#'
+#' Used with \code{\link{acarsLens}} data.
+#'
+#' @name lensNames
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector.
+#'
+#' \describe{
+#' \item{sumobrainNames}{A 26-element character vector of clean lens.org header names.}
+#'
+#' }
+#'
+#' @seealso Go to \href{lens.org}{Lens}, optionally create a free account, and 
+#' download the data. 
+#' 
+#' \code{\link{skipGoogle}}, \code{\link{skipLens}}, \code{\link{skipSumobrain}},
+#' \code{\link{googleColumns}},\code{\link{lensColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{sumobrainNames}},  \code{\link{googleNames}}
+#' 
+"lensNames"
+
+
+#' The number of columns in a lens.org csv data export.
+#'
+#' The number of columns in a lens.org csv data export.
+#'
+#' Used with \code{\link{acarsLens}} data.
+#'
+#' @name lensColumns
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A numeric value.
+#'
+#' \describe{
+#' \item{lensColumns}{A numeric value of the number of columns in a lens.org 
+#' patent data export. }
+#'
+#' }
+#'
+#' @seealso
+#' \code{\link{skipGoogle}}, \code{\link{skipLens}}, \code{\link{skipSumobrain}},
+#' \code{\link{googleColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{sumobrainNames}}, \code{\link{lensNames}}, \code{\link{googleNames}}
+#' 
+"lensColumns"
+
+#' How many lines to skip in a lens.org patent data export.
+#'
+#' How many lines to skip in a lens.org patent data export.
+#'
+#'
+#' Used with \code{\link{acarsLens}} data.
+#'
+#' @name skipLens
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A numeric value.
+#'
+#' \describe{
+#' \item{skipLens}{A numeric value representing the number of rows to skip in a 
+#' lens.org csv data export.}
+#'
+#' }
+#'
+#' @seealso
+#' \code{\link{skipGoogle}}, \code{\link{skipSumobrain}},
+#' \code{\link{googleColumns}},\code{\link{lensColumns}}, \code{\link{sumobrainColumns}}, 
+#' \code{\link{sumobrainNames}}, \code{\link{lensNames}}, \code{\link{googleNames}}
+"skipLens"
+
+
+
 
