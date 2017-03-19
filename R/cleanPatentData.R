@@ -351,43 +351,64 @@ showDups <- function(input){
 #' dim(acars) - dim(acars[removeDups(acars$appNum),])
 #' 
 #' # specific removal: keep the grant docs
-#' acars$hasDup <- showDups(acars$appNum)
+#' hasDup <- showDups(acars$appNum)
+#' pubNum <- extractPubNumber(acars$docNum)
+#' countryCode <- extractCountryCode(acars$docNum)
+#' officeDocLength <- extractDocLength(countryCode = countryCode, pubNum = pubNum)
+#' kindCode <- extractKindCode(acars$docNum)
+#' countryAndKindCode <- paste0(countryCode, kindCode)
+#' docType <- generateDocType(officeDocLength = officeDocLength, 
+#' countryAndKindCode = countryAndKindCode, 
+#' cakcDict = patentr::cakcDict, 
+#' docLengthTypesDict = patentr::docLengthTypesDict)
+#' keepType <- "grant"
+#' toKeep <- removeDups(acars$appNum, hasDup = hasDup, docType = docType, keepType = keepType)
+#' table(toKeep)
+#' acarsDedup <- acars[toKeep, ]
+#' 
 #' 
 #' @export
 #' 
 #' @seealso \code{\link[base]{duplicated}}, \code{\link{showDups}}
 #'
-removeDups <- function(input, hasDup = NA, docType = NA, keepType = NA){
-  
-  # return all the unique doc numbers
-  # or if there are any with 2 or greater, cut those out
-  dupsVector <- duplicated(input)
-  if (sum(dupsVector) >0){
-    print(paste("Removing",sum(dupsVector), "duplicates."))
-  } else{
-    print("No duplicates found.")
-  }
+removeDups <- function(input, hasDup = NA, docType = NA, keepType = "grant"){
   
   # simple return
   if(is.na(hasDup) && is.na(docType) && is.na(keepType)){
     # Note: this is unordered and you may have remove the rows 
     # where other column values have data missing, such as the abstract. 
-    return(!duplicated(input))
+    # return all the unique doc numbers
+    # or if there are any with 2 or greater, cut those out
+    dupsVector <- duplicated(input)
+    if (sum(dupsVector) >0){
+        print(paste("Removing",sum(dupsVector), "duplicates."))
+      } else{
+        print("No duplicates found.")
+      }
+      return(!duplicated(input))
+    
+    # choose the type of document to keep, typically "grant"
   } else if(!is.na(hasDup) && !is.na(docType) && !is.na(keepType)){
-    # keep it or throw it out  
-    # Note for the hasDup == FALSE cases, we want to keep them as well
-    # may need to add an | 
-    return(ifelse(hasDup==TRUE & docType == keepType, TRUE, FALSE))
+      # note: potentially, if there are two of the same keepTypes, you may need 
+      # to run a simple removeDups on the docNum input one more time 
+      return(ifelse(test = hasDup == FALSE | (hasDup==TRUE & docType == keepType), 
+                    yes = TRUE, 
+                    no = FALSE)
+             )
+    # catch all
   } else{
       # return back all TRUES
       warning("Arguments error. Either choose a simple input, or fill out all other argument fields.
-              Returning All TRUEs back to you.")
-    # note if user put in something bad, this throws an error
-      return(ifelse(is.vector(input),rep(TRUE,length(input)),rep(TRUE,dim(input)[1])))
+              Returning All TRUEs back to you if your input is a vector or data frame, else, error.")
+      # note if user put in something non-vector or non-data frame, this throws an error
+      return(ifelse(test = is.vector(input),
+                    yes = rep(TRUE,length(input)), 
+                    no = rep(TRUE,dim(input)[1])))
   }
-  
 
-} ## TODO: test 
+} 
+
+
 
 #' Calculate the type of document
 #' 

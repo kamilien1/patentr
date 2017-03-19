@@ -4,7 +4,7 @@
 \alias{removeDups}
 \title{Remove duplicate entries in a patent data set.}
 \usage{
-removeDups(input, hasDup = NA, docType = NA, keepType = NA)
+removeDups(input, hasDup = NA, docType = NA, keepType = "grant")
 }
 \arguments{
 \item{input}{A vector or a data frame which you wish to remove duplicate values. 
@@ -47,7 +47,21 @@ which document type to keep and the rest get thrown out.
 dim(acars) - dim(acars[removeDups(acars$appNum),])
 
 # specific removal: keep the grant docs
-acars$hasDup <- showDups(acars$appNum)
+hasDup <- showDups(acars$appNum)
+pubNum <- extractPubNumber(acars$docNum)
+countryCode <- extractCountryCode(acars$docNum)
+officeDocLength <- extractDocLength(countryCode = countryCode, pubNum = pubNum)
+kindCode <- extractKindCode(acars$docNum)
+countryAndKindCode <- paste0(countryCode, kindCode)
+docType <- generateDocType(officeDocLength = officeDocLength, 
+countryAndKindCode = countryAndKindCode, 
+cakcDict = patentr::cakcDict, 
+docLengthTypesDict = patentr::docLengthTypesDict)
+keepType <- "grant"
+toKeep <- removeDups(acars$appNum, hasDup = hasDup, docType = docType, keepType = keepType)
+table(toKeep)
+acarsDedup <- acars[toKeep, ]
+
 
 }
 \seealso{
