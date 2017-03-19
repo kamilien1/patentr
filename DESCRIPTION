@@ -15,4 +15,5 @@ Imports: readxl (>= 0.1.1),
 Suggests: testthat,
 	rprojroot
 Remotes: tidyverse/readxl
+Additional_repositories: https://github.com/tidyverse/readxl
 RoxygenNote: 6.0.1
