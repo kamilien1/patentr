@@ -87,3 +87,25 @@ test_that("Showing all duplicates and showDups is a logical vector",{
   expect_type(showDups(df$appNum) ,"logical")
 })
 
+
+# same length when generating the type of document
+test_that("generateDocType returns same length as number of rows of data frame",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanHeaderNames(patentData = df)
+  df$pubNum <- extractPubNumber(df$docNum)
+  df$countryCode <- extractCountryCode(df$docNum)
+  df$kindCode <- extractKindCode(df$docNum)
+  df$officeDocLength <- extractDocLength(countryCode = df$countryCode, pubNum = df$pubNum)
+  df$countryAndKindCode <- with(df, paste0(countryCode, kindCode))
+  # should return the same length
+  temp <- generateDocType(officeDocLength = df$officeDocLength,
+                          countryAndKindCode = df$countryAndKindCode,
+                          cakcDict = patentr::cakcDict,
+                          docLengthTypesDict = patentr::docLengthTypesDict)
+  expect_length(temp ,dim(df)[1])
+})
+
+
+
+
+

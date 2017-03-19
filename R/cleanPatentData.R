@@ -300,7 +300,7 @@ createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://
 #' @examples 
 #' 
 #' acarsDups <- acars[showDups(acars$appNum),]
-#' head(acarsDups[order(acarsDups$appNum),c("docNum","docType","appNum")])
+#' head(acarsDups[order(acarsDups$appNum),c("docNum","docTypeSumobrain","appNum")])
 #' 
 #' @export
 #' 
@@ -389,7 +389,7 @@ removeDups <- function(input, hasDup = NA, docType = NA, keepType = NA){
 
 } ## TODO: test 
 
-#' Get the type of document. 
+#' Calculate the type of document
 #' 
 #' @description Determine the type of document from the patent publication data. 
 #' 
@@ -397,55 +397,66 @@ removeDups <- function(input, hasDup = NA, docType = NA, keepType = NA){
 #' type of patent document, or, if provided, still requires standardization. By 
 #' using the kind code, country code, 
 #' 
-#' @param 
+#' @param officeDocLength The concat value of country code and number of numerical digits. 
+#' Extracted using the \code{\link{extractDocLength}} function.
+#' @param countryAndKindCode The concat value of the country code and kind code. 
+#' Extracted using the \code{\link{extractCountryCode}} and \code{\link{extractKindCode}} 
+#' functions. 
+#' @param cakcDict A county and kind code dictionary. Default is \code{\link{cakcDict}}.
+#' @param docLengthTypesDict A document length and type dictionary. Default is \code{\link{docLengthTypesDict}}.
+#' 
+#' @examples 
+#' 
+#' acars <- acars
+#' acars$pubNum <- extractPubNumber(acars$docNum) # pubnum, ex ####
+#' acars$countryCode <- extractCountryCode(acars$docNum) # country code, ex USAPP, USD
+#' acars$officeDocLength <- extractDocLength(countryCode = acars$countryCode, 
+#'                                          pubNum = acars$pubNum) # cc + pub num length concat
+#' acars$kindCode <- extractKindCode(acars$docNum)
+#' acars$countryAndKindCode <- with(acars, paste0(countryCode, kindCode))
+#'                                          
+#' acars$docType <- generateDocType(officeDocLength = acars$officeDocLength,
+#'                             countryAndKindCode = acars$countryAndKindCode,
+#'                             cakcDict = cakcDict,
+#'                             docLengthTypesDict = docLengthTypesDict)
+#' table(acars$docType)
 #' 
 #' 
+#' @return A vector of characters labeling the document type, with NA for when 
+#' no match was found.
 #' 
-#' acars$pubNum <- extractPubNumber(acars$docNum)
-#' acars$countryCode <- extractCountryCode(acars$docNum)
-#' acars$officeDocLength <- extractDocLength(countryCode = acars$countryCode,
-#' pubNum = acars$pubNum)
+#' @export
+#' 
+#' @seealso \code{\link{cakcDict}}, \code{\link{docLengthTypesDict}}
+#' 
+generateDocType <- function(officeDocLength, countryAndKindCode, 
+                            cakcDict = patentr::cakcDict, 
+                            docLengthTypesDict = patentr::docLengthTypesDict){
 
+  
+  docTypeDLT <- docLengthTypesDict[officeDocLength]
+  docTypeCAKC <- cakcDict[countryAndKindCode]
+  # replace NA values
+  docTypeCAKC <- ifelse(is.na(docTypeCAKC),"NA",docTypeCAKC)
+  docTypeDLT <- ifelse(is.na(docTypeDLT), "NA",docTypeDLT)
+  # prioritize docTypeCAKC as it is a more comprehensive list
+  # else, default on docTypeDLT
+  docType <- ifelse(docTypeCAKC!="NA", docTypeCAKC, docTypeDLT)
+  
+  foundValue <- sum(officeDocLength %in% names(docLengthTypesDict) | 
+                      countryAndKindCode %in% names(cakcDict))
+  
+  # warn user if not everything is fine
+  if (foundValue < length(officeDocLength)) { 
+    warning("In generateDocType, not all values were found. ",
+            length(officeDocLength)-foundValue," Values will be NA.")}
+  
+  return(docType)
+  
+  # view what is not equal to inspect what they are, probably WO reports
+  # notequal <- acars[!(docTypeCAKC == docTypeDLT) & 
+  # docTypeCAKC != "NA" & docTypeDLT != "NA", c(1,2,14, 16)]
+  # head(notequal)
 
-temp <- acars
-# create officeDocLength string
-# get the publication number (the #### portion of US####B2)
-temp$pubNum <- extractPubNumber(temp$docNum)
-# get the country code (this is a pseudo-country code, may include USAPP)
-temp$countryCode <- extractCountryCode(temp$docNum)
-# get the concat of country code and number of numerical digits 
-temp$officeDocLength <- extractDocLength(countryCode = temp$countryCode, pubNum = temp$pubNum)
-# get the kind code
-temp$kindCode <- extractKindCode(temp$docNum)
-# get the concat of country code and kind code, note some exports do not provide this
-temp$countryAndKindCode <- with(temp, paste0(countryCode, kindCode))
-
-
-# see how many we have been able to map (assuming error-free)
-sum(temp$officeDocLength %in% docLengthTypes$key | temp$countryAndKindCode %in% kindCodes$countryAndKindCode)
-
-# if officeDocLength exists in key, map it to docLengthTypes value
-# extract, office country country code and kind code , countryAndKindCode
-# if countryAndKindCode exist in kindCodes$countryAndKindCode, map it
-# if something still isn't found...leave it as a "MANUALLY CHECK" 
-
-
-# set doc type from docLengthTypes
-dlt <- docLengthTypes$value; names(dlt) <- docLengthTypes$key
-docTypeDLT <- dlt[temp$officeDocLength]
-# set doc type from countryAndKindCode
-cakc <- kindCodes$docType; names(cakc) <- kindCodes$countryAndKindCode
-docTypeCAKC <- cakc[temp$countryAndKindCode]
-docTypeCAKC <- ifelse(is.na(docTypeCAKC),"NA",docTypeCAKC)
-docTypeDLT <- ifelse(is.na(docTypeDLT), "NA",docTypeDLT)
-equal <- temp$docNum[docTypeCAKC == docTypeDLT]
-notequal <- temp[!(docTypeCAKC == docTypeDLT) & 
-                            docTypeCAKC != "NA" & 
-                            docTypeDLT != "NA", c(1,2,14, 16)]
-
-# set doc type to countryAndKindCode CAKC value first
-# if doc type is still "NA", let it be equal to docTypeDLT
-temp$docType <- ifelse(docTypeCAKC!="NA", docTypeCAKC, docTypeDLT)
-table(temp$docType)
-
+}
 

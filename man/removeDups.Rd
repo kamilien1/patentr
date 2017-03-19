@@ -43,10 +43,10 @@ which document type to keep and the rest get thrown out.
 }
 \examples{
 
-# see how many rows were removed
-dim(acars) - dim(acars[removeDups(acars$docNum),])
+# simple removal: see how many rows were removed
+dim(acars) - dim(acars[removeDups(acars$appNum),])
 
-# optionally specify what to remove
+# specific removal: keep the grant docs
 acars$hasDup <- showDups(acars$appNum)
 
 }

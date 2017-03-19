@@ -358,3 +358,70 @@
 
 
 
+#' A named vector of key/value pairs for country codes and publication number 
+#' document lengths used to determine the type of document.
+#'
+#'
+#' A named vector of key/value pairs for country codes and publication number 
+#' document lengths used to determine the type of document.
+#'
+#'
+#' @name docLengthTypesDict
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A named character vector
+#'
+#' \describe{
+#' \item{docLengthTypesDict}{A named character vector representing key/value pairs
+#' of doc lengths, country codes, and type of patent document.}
+#'
+#' }
+#'
+#' Built with the following code: 
+#' 
+#' \code{docLengthTypesDict <- docLengthTypes$value}
+#' 
+#' \code{names(docLengthTypesDict) <- docLengthTypes$key}
+#'
+#' @seealso
+#' \code{\link{generateDocType}}, \code{\link{docLengthTypes}}
+#' 
+"docLengthTypesDict"
+
+
+#' A country and kind code dictionary.
+#'
+#'
+#' A named vector of key/value pairs for country codes and kind codes used to 
+#' determine the type of document. 
+#'
+#'
+#' @name cakcDict
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A named character vector
+#'
+#' \describe{
+#' \item{cakcDict}{A named character vector representing key/value pairs
+#' of country codes, kind codes, and type of patent document.}
+#'
+#' }
+#'
+#' Built with the following code: 
+#' 
+#' \code{cakcDict <- kindCodes$docType}
+#' 
+#' \code{names(cakcDict) <- kindCodes$countryAndKindCode}
+#'
+#' @seealso
+#' \code{\link{generateDocType}}, \code{\link{kindCodes}}
+#' 
+"cakcDict"
+
+
+
+
