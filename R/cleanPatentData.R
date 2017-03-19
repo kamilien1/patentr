@@ -1,38 +1,69 @@
-#' Generate a standard set of header names for Sumobrain import data
+#' Generate a standard set of header names for import data
 #' 
 #' @description Create a standard nameset from Sumobrain import data. 
 #' See \code{\link{acars}} for the name set.
+#' 
+#' There are three main sources of free and exportable patent data from the internet: 
+#' \enumerate{
+#' \item{\href{www.sumobrain.com}{Sumobrain}}
+#' \item{\href{www.lens.org}{The Lens}}
+#' \item{\href{www.patents.google.com}{Google}}
+#' }
+#' 
+#' These three popular sites have varying levels of exportable data available. 
+#' Sumobrain tends to be the most comprehensive, followed by Lens, and finally 
+#' by Google. Thus, all three have hardcoded data available in the \code{patentr} 
+#' package. 
 #' 
 #' To download Sumobrain data, go to \url{http://www.sumobrain.com} and create a free
 #' account. Then run your search, export the data (250 max at a time), and use the 
 #' \code{\link{chooseFiles}} and \code{\link{importPatentData}} functions to load
 #' the data into R. 
 #' 
-#' @param sumobrainData A data frame 11 columns wide, imported from sumobrain.com.
-#' @param columnsExpected A sumobrain export has 11 columns. In case their export changes,
-#' you can modify the value.
-#' @param cleanNames A standard list of clean names. 
+#' To download Lens data, go to \url{www.lens.org}. You do not need to create an 
+#' account. Run your search, and in the header section, look for the cloud icon 
+#' with a downward arrow. Choose the CSV option. 
+#' 
+#' To download Google patent data, visit \url{www.patents.google.com}, run 
+#' your search, and click "Download (CSV)" in the upper left-hand corner. 
+#' 
+#' @param patentData A data frame. Default is NA.
+#' @param columnsExpected An expected number of columns. 
+#' Default is Sumobrain \code{\link{sumobrainColumns}} data.
+#' @param cleanNames A standard list of clean names. Default is Sumobrain 
+#' \code{\link{sumobrainNames}} data.
 #' 
 #' @return A data frame 11 columns wide, with standard column names used in other
 #' functions. 
 #' 
 #' @examples
-#' cleanData <- cleanSumobrainNames(sumobrainData = acars)
+#' cleanData <- cleanHeaderNames(patentData = acars)
 #' 
 #' @export
 #' 
-cleanSumobrainNames <- function(sumobrainData = NA, columnsExpected = 11,
-                                    cleanNames = c("docNum", "docType","pubDate",
-                                                   "title","abstract","inventors",
-                                                   "assignee","appNum","dateFiled",
-                                                   "classPrimary","classOthers")){
+#' @seealso \enumerate{
+#' \item{\code{\link{sumobrainColumns}}}
+#' \item{\code{\link{sumobrainNames}}}
+#' \item{\code{\link{skipSumobrain}}}
+#' \item{\code{\link{googleColumns}}}
+#' \item{\code{\link{googleNames}}}
+#' \item{\code{\link{skipGoogle}}}
+#' \item{\code{\link{lensColumns}}}
+#' \item{\code{\link{lensNames}}}
+#' \item{\code{\link{skipLens}}}
+#' }
+#' 
+#' 
+cleanHeaderNames <- function(patentData = NA, columnsExpected = patentr::sumobrainColumns,
+                                    cleanNames = patentr::sumobrainNames){
   
-  # sumobrain exports have 11 columns
-  if(is.data.frame(sumobrainData) && dim(sumobrainData)[2] == columnsExpected &&
+  # check to make sure dataframe is the appropriate width and the names 
+  # fit the width
+  if(is.data.frame(patentData) && dim(patentData)[2] == columnsExpected &&
      length(cleanNames)==columnsExpected){
-    names(sumobrainData) <- cleanNames
+    names(patentData) <- cleanNames
   }
-  return(sumobrainData)
+  return(patentData)
 }
 
 
@@ -81,6 +112,7 @@ extractCountryCode <- function(docNum) {
 #' acars$pubNum <- extractPubNumber(acars$docNum)
 #' head(acars[,c("docNum","pubNum")]) 
 #'   
+#' @seealso \code{\link{createGoogleURL}}
 #'  
 #' @export
 #' 
@@ -122,3 +154,207 @@ extractKindCode <- function(docNum) {
   kindCode[is.na(kindCode)] <- ''
   return(kindCode)
 }
+
+
+#' Get a code for length of doc and country code
+#' 
+#' @description Generate a custom concatenation of country code and length of 
+#' the publication number, for document type identification purposes. 
+#' 
+#' Given limited metadata available on free sites, often times the downloaded
+#' data set does not include the type of patent document. There are two easy ways to 
+#' discover the type of a patent document. A dictionary stored with the 
+#' package can compare the output to match up the type of patent document. 
+#' 
+#' \enumerate{
+#' \item The kind code, if present, is typically the same for each country.
+#' \code{B} is usually a patent and \code{A} is usually an application.
+#' \item The length of the publication number, along with the country code, is 
+#' another great indicator. Applications in USA have 11 numbers, and, for now,
+#' 9 numbers for granted patents.
+#' }
+#' 
+#' @param countryCode A string vector of country codes
+#' @param pubNum A string vector of the numeric portion of a publication number.
+#' 
+#' @return A string vector of concatenated country code and publication number 
+#' length, such as US11 or EP9. 
+#' 
+#' @examples 
+#' acars$pubNum <- extractPubNumber(acars$docNum)
+#' acars$countryCode <- extractCountryCode(acars$docNum)
+#' acars$officeDocLength <- extractDocLength(countryCode = acars$countryCode,
+#' pubNum = acars$pubNum)
+#' head(acars[,c("officeDocLength","docNum")])
+#' 
+#' @export
+#' 
+extractDocLength <- function(countryCode, pubNum) {
+  # make a concat of length of document and country code to figure out
+  # what type of document it is, in general (patent, app, reissue, or design)
+  officeLength <- paste(countryCode, nchar(pubNum),sep='')
+  officeLength    
+  
+}
+
+
+#' Format patent dates.
+#' 
+#' @description Create a clean year, month, day date.
+#' 
+#' Reading data in and aout of R may cause date mistakes, using a simple set
+#' function will ensure data types are the right format and class type. This 
+#' data format is cleaned up to be in the format yyyy-mm-dd with no hours,
+#' minutes, seconds, or time zone attached. 
+#' 
+#' @param dateVector A vector of character dates.
+#' @param orders The orders the dates appear in. 
+#' 
+#' @importFrom lubridate parse_date_time
+#' 
+#' @return A date vector of year, month, day dates. 
+#' 
+#' @examples 
+#' acars$pubDate <- extractCleanDate(dateVector = acars$pubDate, orders = "ymd")
+#' 
+#' 
+#' @export
+#' 
+extractCleanDate <- function(dateVector, orders="ymd"){
+  
+  # use lubridate to ensure all dates are proper
+  # get the order and then get rid of the UTC by
+  # converting it with as.Date
+  as.Date(lubridate::parse_date_time(dateVector, orders=orders))
+  
+}
+
+
+
+#' Create a URL link to Google patents. 
+#' 
+#' @description Create a URL string to link you to Google Patents. 
+#' 
+#' By concatenating the country code, publication number, and kind code, you can
+#' generate a URL to link you to google patents for further exploration. This 
+#' feature is especially useful when browsing the data in a spreadsheet or in 
+#' a Shiny app. It is also useful for extracting data from the HTML content. 
+#' 
+#' As each website (Google, lens.org, sumobrain.com, etc..) has a different 
+#' method for generating patent URLs, these functions are website-specific. 
+#' 
+#' The original Google patents version still works as of March 2017 and the 
+#' \code{googleURL} value is  \code{https://www.google.com/patents/}. This older 
+#' version may be easier to extract data. 
+#' 
+#' @param countryCode A character vector of the country code of the document. 
+#' Typically a two-letter character. 
+#' @param pubNum A character vector of the numeric portion of a publication number.
+#' @param kindCode character vector of the kind code of a document. If not available,
+#' enter a blank string "".
+#' @param googleURL A character string of the URL to Google Patents, with working
+#' default value. 
+#' 
+#' @return A character vector of properly formatted URL strings. 
+#' 
+#' @examples 
+#' acars$kindCode <- extractKindCode(acars$docNum)
+#' acars$pubName <- extractPubNumber(acars$docNum)
+#' acars$googleURL <- createGoogleURL(countryCode = acars$countryCode, 
+#' pubNum = acars$pubNum, kindCode =acars$kindCode)
+#' head(acars$googleURL)
+#' 
+#' @export
+createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://patents.google.com/patent/"){
+  # create the URL 
+  paste(googleURL, countryCode, pubNum, kindCode,  sep='')  
+  # TODO: validate the URL
+  # http://stackoverflow.com/questions/28527100/check-if-https-hypertext-transfer-protocol-secure-url-is-valid
+}
+
+
+
+#' Remove duplicate values in a patent data set. 
+#' 
+#' @description Remove duplicate values in the patent data. Typically you will 
+#' want to check if you have repeat document numbers. A document number should be 
+#' a unique number in your dataset, thus, having a duplicate document number in your 
+#' data set should be avoided. 
+#' 
+#' Often times, your data sets contain duplicate patent entries. This function is 
+#' a wrapper function of the \code{\link[base]{duplicated}} function, 
+#' applied to a dataframe or vector. 
+#' 
+#' For example, if you have the vector [US123, US123, US456], you will get the value 
+#' TRUE FALSE TRUE and the duplicate value is removed. 
+#' 
+#' @param input A vector or a data frame which you wish to remove duplicate values. 
+#' 
+#' @return A logical vector of TRUE / FALSE values indicating with one TRUE value 
+#' per duplicate (two or more identical) values. 
+#' 
+#' @examples 
+#' 
+#' acars <- acars[removeDups(acars$docNum),]
+#' head(removeDups(acars$docNum))
+#' 
+#' @export
+#' 
+#' @seealso \code{\link[base]{duplicated}}, \code{\link{showDups}}
+#'
+removeDups <- function(input){
+  
+  # return all the unique doc numbers
+  # or if there are any with 2 or greater, cut those out
+  dupsVector <- duplicated(input)
+  if (sum(dupsVector) >0){
+    print(paste("Removing",sum(dupsVector), "duplicates."))
+  } else{
+    print("No duplicates found.")
+  }
+  
+  # return the values that are not duplicated
+  # Note: this is unordered and you may have some duplicated patent data
+  # where other column values have data missing, such as the abstract. 
+  !duplicated(input)
+}
+
+
+#' View all your duplicate entries to decide which to remove.
+#' 
+#' @description Return a logical vector of all duplicate entries. 
+#' 
+#' Often times, you want to review your duplicate results to determine which 
+#' rows you want to keep and which you want to erase. 
+#' 
+#' For example, if you have 
+#' an application number that is an application, and another that is a search report, 
+#' then you will want to keep the application data and remove the search report 
+#' entry. 
+#' 
+#' Or, if you have an application number that has both a grant and an 
+#' application entry, you may want to remove the application from your analysis 
+#' and focus on the grant data, as the claim scope is most important for the 
+#' granted patent. 
+#' 
+#' @param input A vector or a data frame which you wish to view duplicated values. 
+#' 
+#' @return A logical vector of TRUE / FALSE with all entries that contain two 
+#' or more duplicate values. 
+#' 
+#' @examples 
+#' 
+#' acarsDups <- acars[showDups(acars$appNum),]
+#' head(acarsDups[order(acarsDups$appNum),c("docNum","docType","appNum")])
+#' 
+#' @export
+#' 
+#' @seealso \code{\link[base]{duplicated}}, \code{\link{removeDups}}
+#'
+showDups <- function(input){
+  
+  # return all dups
+  duplicated(input) | duplicated(input, fromLast=T)  
+}
+
+
