@@ -274,51 +274,6 @@ createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://
 
 
 
-#' Remove duplicate values in a patent data set. 
-#' 
-#' @description Remove duplicate values in the patent data. Typically you will 
-#' want to check if you have repeat document numbers. A document number should be 
-#' a unique number in your dataset, thus, having a duplicate document number in your 
-#' data set should be avoided. 
-#' 
-#' Often times, your data sets contain duplicate patent entries. This function is 
-#' a wrapper function of the \code{\link[base]{duplicated}} function, 
-#' applied to a dataframe or vector. 
-#' 
-#' For example, if you have the vector [US123, US123, US456], you will get the value 
-#' TRUE FALSE TRUE and the duplicate value is removed. 
-#' 
-#' @param input A vector or a data frame which you wish to remove duplicate values. 
-#' 
-#' @return A logical vector of TRUE / FALSE values indicating with one TRUE value 
-#' per duplicate (two or more identical) values. 
-#' 
-#' @examples 
-#' 
-#' acars <- acars[removeDups(acars$docNum),]
-#' head(removeDups(acars$docNum))
-#' 
-#' @export
-#' 
-#' @seealso \code{\link[base]{duplicated}}, \code{\link{showDups}}
-#'
-removeDups <- function(input){
-  
-  # return all the unique doc numbers
-  # or if there are any with 2 or greater, cut those out
-  dupsVector <- duplicated(input)
-  if (sum(dupsVector) >0){
-    print(paste("Removing",sum(dupsVector), "duplicates."))
-  } else{
-    print("No duplicates found.")
-  }
-  
-  # return the values that are not duplicated
-  # Note: this is unordered and you may have some duplicated patent data
-  # where other column values have data missing, such as the abstract. 
-  !duplicated(input)
-}
-
 
 #' View all your duplicate entries to decide which to remove.
 #' 
@@ -356,5 +311,141 @@ showDups <- function(input){
   # return all dups
   duplicated(input) | duplicated(input, fromLast=T)  
 }
+
+
+#' Remove duplicate entries in a patent data set. 
+#' 
+#' @description Remove duplicate values in the patent data. Typically you will 
+#' want to check if you have repeat document numbers. A document number should be 
+#' a unique number in your dataset, thus, having a duplicate document number in your 
+#' data set should be avoided. You can optionally specify which document type to keep.
+#' 
+#' Often times, your data sets contain duplicate patent entries. This function is 
+#' a wrapper function of the \code{\link[base]{duplicated}} function, 
+#' applied to a dataframe or vector. 
+#' 
+#' For example, if you have the vector [US123, US123, US456], you will get the value 
+#' TRUE FALSE TRUE and the duplicate value is removed. 
+#' 
+#' You can go deeper with the optional variables. For many analyses, we want to exclude the 
+#' second document, typically the application. This function allows you to choose 
+#' which document type to keep and the rest get thrown out.
+#' 
+#' 
+#' @param input A vector or a data frame which you wish to remove duplicate values. 
+#' When choosing a data frame, you are more selective. For example, you may want to 
+#' remove a patent document only if it has the same docNum and country code. 
+#' @param hasDup A logical vector noting if a duplicate exists. If NA, ignore. The 
+#' \code{\link{showDups}} funciton helps with this input.
+#' @param docType A character vector of the type of patent document (app, grant, etc.). 
+#' If NA, ignore.
+#' @param keepType A character variable denoting which document type to keep. Default is "grant". 
+#' If NA, ignore.
+#' 
+#' @return A logical vector used to remove duplicate documents not fitting the one 
+#' chosen. TRUE is for the document to keep.
+#' 
+#' @examples 
+#' 
+#' # simple removal: see how many rows were removed
+#' dim(acars) - dim(acars[removeDups(acars$appNum),])
+#' 
+#' # specific removal: keep the grant docs
+#' acars$hasDup <- showDups(acars$appNum)
+#' 
+#' @export
+#' 
+#' @seealso \code{\link[base]{duplicated}}, \code{\link{showDups}}
+#'
+removeDups <- function(input, hasDup = NA, docType = NA, keepType = NA){
+  
+  # return all the unique doc numbers
+  # or if there are any with 2 or greater, cut those out
+  dupsVector <- duplicated(input)
+  if (sum(dupsVector) >0){
+    print(paste("Removing",sum(dupsVector), "duplicates."))
+  } else{
+    print("No duplicates found.")
+  }
+  
+  # simple return
+  if(is.na(hasDup) && is.na(docType) && is.na(keepType)){
+    # Note: this is unordered and you may have remove the rows 
+    # where other column values have data missing, such as the abstract. 
+    return(!duplicated(input))
+  } else if(!is.na(hasDup) && !is.na(docType) && !is.na(keepType)){
+    # keep it or throw it out  
+    # Note for the hasDup == FALSE cases, we want to keep them as well
+    # may need to add an | 
+    return(ifelse(hasDup==TRUE & docType == keepType, TRUE, FALSE))
+  } else{
+      # return back all TRUES
+      warning("Arguments error. Either choose a simple input, or fill out all other argument fields.
+              Returning All TRUEs back to you.")
+    # note if user put in something bad, this throws an error
+      return(ifelse(is.vector(input),rep(TRUE,length(input)),rep(TRUE,dim(input)[1])))
+  }
+  
+
+} ## TODO: test 
+
+#' Get the type of document. 
+#' 
+#' @description Determine the type of document from the patent publication data. 
+#' 
+#' Often times, data exports from publicly available sources do not provide the 
+#' type of patent document, or, if provided, still requires standardization. By 
+#' using the kind code, country code, 
+#' 
+#' @param 
+#' 
+#' 
+#' 
+#' acars$pubNum <- extractPubNumber(acars$docNum)
+#' acars$countryCode <- extractCountryCode(acars$docNum)
+#' acars$officeDocLength <- extractDocLength(countryCode = acars$countryCode,
+#' pubNum = acars$pubNum)
+
+
+temp <- acars
+# create officeDocLength string
+# get the publication number (the #### portion of US####B2)
+temp$pubNum <- extractPubNumber(temp$docNum)
+# get the country code (this is a pseudo-country code, may include USAPP)
+temp$countryCode <- extractCountryCode(temp$docNum)
+# get the concat of country code and number of numerical digits 
+temp$officeDocLength <- extractDocLength(countryCode = temp$countryCode, pubNum = temp$pubNum)
+# get the kind code
+temp$kindCode <- extractKindCode(temp$docNum)
+# get the concat of country code and kind code, note some exports do not provide this
+temp$countryAndKindCode <- with(temp, paste0(countryCode, kindCode))
+
+
+# see how many we have been able to map (assuming error-free)
+sum(temp$officeDocLength %in% docLengthTypes$key | temp$countryAndKindCode %in% kindCodes$countryAndKindCode)
+
+# if officeDocLength exists in key, map it to docLengthTypes value
+# extract, office country country code and kind code , countryAndKindCode
+# if countryAndKindCode exist in kindCodes$countryAndKindCode, map it
+# if something still isn't found...leave it as a "MANUALLY CHECK" 
+
+
+# set doc type from docLengthTypes
+dlt <- docLengthTypes$value; names(dlt) <- docLengthTypes$key
+docTypeDLT <- dlt[temp$officeDocLength]
+# set doc type from countryAndKindCode
+cakc <- kindCodes$docType; names(cakc) <- kindCodes$countryAndKindCode
+docTypeCAKC <- cakc[temp$countryAndKindCode]
+docTypeCAKC <- ifelse(is.na(docTypeCAKC),"NA",docTypeCAKC)
+docTypeDLT <- ifelse(is.na(docTypeDLT), "NA",docTypeDLT)
+equal <- temp$docNum[docTypeCAKC == docTypeDLT]
+notequal <- temp[!(docTypeCAKC == docTypeDLT) & 
+                            docTypeCAKC != "NA" & 
+                            docTypeDLT != "NA", c(1,2,14, 16)]
+
+# set doc type to countryAndKindCode CAKC value first
+# if doc type is still "NA", let it be equal to docTypeDLT
+temp$docType <- ifelse(docTypeCAKC!="NA", docTypeCAKC, docTypeDLT)
+table(temp$docType)
 
 

@@ -8,7 +8,7 @@
 \describe{
 \item{docNum}{A published document number including the kind code, publication number,
 and kind code for the patent document.}
-\item{docType}{Very similar to the country code, with minor additions, USAPP being the 
+\item{docTypeSumobrain}{Very similar to the country code, with minor additions, USAPP being the 
 most noticable difference. }
 \item{pubDate}{Publication Date}
 \item{title}{Title}
