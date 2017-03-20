@@ -9,7 +9,10 @@ extractCleanDate(dateVector, orders = "ymd")
 \arguments{
 \item{dateVector}{A vector of character dates.}
 
-\item{orders}{The orders the dates appear in.}
+\item{orders}{The orders the dates appear in. 
+Sumobrain is "ymd" and Lens.org and Google data are "mdy". Hardcoded values include 
+\code{\link{googleDateOrder}},\code{\link{lensDateOrder}}, 
+and \code{\link{sumobrainDateOrder}}.}
 }
 \value{
 A date vector of year, month, day dates.

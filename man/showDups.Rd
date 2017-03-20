@@ -32,7 +32,7 @@ granted patent.
 \examples{
 
 acarsDups <- acars[showDups(acars$appNum),]
-head(acarsDups[order(acarsDups$appNum),c("docNum","docType","appNum")])
+head(acarsDups[order(acarsDups$appNum),c("docNum","docTypeSumobrain","appNum")])
 
 }
 \seealso{

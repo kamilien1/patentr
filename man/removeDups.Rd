@@ -2,34 +2,66 @@
 % Please edit documentation in R/cleanPatentData.R
 \name{removeDups}
 \alias{removeDups}
-\title{Remove duplicate values in a patent data set.}
+\title{Remove duplicate entries in a patent data set.}
 \usage{
-removeDups(input)
+removeDups(input, hasDup = NA, docType = NA, keepType = "grant")
 }
 \arguments{
-\item{input}{A vector or a data frame which you wish to remove duplicate values.}
+\item{input}{A vector or a data frame which you wish to remove duplicate values. 
+When choosing a data frame, you are more selective. For example, you may want to 
+remove a patent document only if it has the same docNum and country code.}
+
+\item{hasDup}{A logical vector noting if a duplicate exists. If NA, ignore. The 
+\code{\link{showDups}} funciton helps with this input.}
+
+\item{docType}{A character vector of the type of patent document (app, grant, etc.). 
+If NA, ignore.}
+
+\item{keepType}{A character variable denoting which document type to keep. Default is "grant". 
+If NA, ignore.}
 }
 \value{
-A logical vector of TRUE / FALSE values indicating with one TRUE value 
-per duplicate (two or more identical) values.
+A logical vector used to remove duplicate documents not fitting the one 
+chosen. TRUE is for the document to keep.
 }
 \description{
 Remove duplicate values in the patent data. Typically you will 
 want to check if you have repeat document numbers. A document number should be 
 a unique number in your dataset, thus, having a duplicate document number in your 
-data set should be avoided. 
+data set should be avoided. You can optionally specify which document type to keep.
 
 Often times, your data sets contain duplicate patent entries. This function is 
 a wrapper function of the \code{\link[base]{duplicated}} function, 
 applied to a dataframe or vector. 
 
 For example, if you have the vector [US123, US123, US456], you will get the value 
-TRUE FALSE TRUE and the duplicate value is removed.
+TRUE FALSE TRUE and the duplicate value is removed. 
+
+You can go deeper with the optional variables. For many analyses, we want to exclude the 
+second document, typically the application. This function allows you to choose 
+which document type to keep and the rest get thrown out.
 }
 \examples{
 
-acars <- acars[removeDups(acars$docNum),]
-head(removeDups(acars$docNum))
+# simple removal: see how many rows were removed
+dim(acars) - dim(acars[removeDups(acars$appNum),])
+
+# specific removal: keep the grant docs
+hasDup <- showDups(acars$appNum)
+pubNum <- extractPubNumber(acars$docNum)
+countryCode <- extractCountryCode(acars$docNum)
+officeDocLength <- extractDocLength(countryCode = countryCode, pubNum = pubNum)
+kindCode <- extractKindCode(acars$docNum)
+countryAndKindCode <- paste0(countryCode, kindCode)
+docType <- generateDocType(officeDocLength = officeDocLength, 
+countryAndKindCode = countryAndKindCode, 
+cakcDict = patentr::cakcDict, 
+docLengthTypesDict = patentr::docLengthTypesDict)
+keepType <- "grant"
+toKeep <- removeDups(acars$appNum, hasDup = hasDup, docType = docType, keepType = keepType)
+table(toKeep)
+acarsDedup <- acars[toKeep, ]
+
 
 }
 \seealso{

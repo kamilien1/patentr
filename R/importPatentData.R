@@ -25,6 +25,7 @@
 #' 
 #' @importFrom readxl read_excel
 #' @importFrom plyr ldply
+#' 
 importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
   
   # grep all files that end in "xls". This is a lazy-mans error-check. 
@@ -62,9 +63,7 @@ importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
 #' allData <- readIpExcel(filePaths)
 #' }
 #' @export
-
-
-
+#' 
 chooseFiles <- function() {
   ## Note: adding in @importFrom tcltk tk_choose.files breaks the build
   # on linux machines, it may be for the reason below (tcltk may not be installed
