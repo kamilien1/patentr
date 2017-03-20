@@ -127,7 +127,8 @@ extractPubNumber <- function(docNum) {
   # get rid of country code
   pubNum <-  gsub("^[A-Z]{0,4}",'',pubNum)
   # get rid of kind code
-  pubNum <- gsub("*[A-Z][0-9]$",'', pubNum)
+  # extra * at end because kind code can end in letter or letter + #
+  pubNum <- gsub("*[A-Z][0-9]*$",'', pubNum)
   return(pubNum)
 } 
 
@@ -212,6 +213,9 @@ extractDocLength <- function(countryCode, pubNum) {
 #' 
 #' @param dateVector A vector of character dates.
 #' @param orders The orders the dates appear in. 
+#' Sumobrain is "ymd" and Lens.org and Google data are "mdy". Hardcoded values include 
+#' \code{\link{googleDateOrder}},\code{\link{lensDateOrder}}, 
+#' and \code{\link{sumobrainDateOrder}}.
 #' 
 #' @importFrom lubridate parse_date_time
 #' 
@@ -457,7 +461,7 @@ generateDocType <- function(officeDocLength, countryAndKindCode,
                             cakcDict = patentr::cakcDict, 
                             docLengthTypesDict = patentr::docLengthTypesDict){
 
-  
+  # map it 
   docTypeDLT <- docLengthTypesDict[officeDocLength]
   docTypeCAKC <- cakcDict[countryAndKindCode]
   # replace NA values
@@ -470,11 +474,12 @@ generateDocType <- function(officeDocLength, countryAndKindCode,
   foundValue <- sum(officeDocLength %in% names(docLengthTypesDict) | 
                       countryAndKindCode %in% names(cakcDict))
   
+
   # warn user if not everything is fine
   if (foundValue < length(officeDocLength)) { 
     warning("In generateDocType, not all values were found. ",
             length(officeDocLength)-foundValue," Values will be NA.")}
-  
+
   return(docType)
   
   # view what is not equal to inspect what they are, probably WO reports
@@ -551,8 +556,23 @@ cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
 #' read carefully to create your own. 
 #' 
 #' @param patentData The data frame of initial raw patent data. 
+#' @param columnsExpected The expected width of the data frame, numeric.
+#' @param cleanNames A character vector of length columnsExpected to rename the 
+#' data frame with.
+#' @param dateFields A character vector of the date column names which will be 
+#' converted to `Date` format.
+#' @param dateOrders A character string of the format required to convert string 
+#' data into `Date` data. Sumobrain is "ymd" and lens and Google data are "mdy".
+#' Hardcoded values include \code{\link{googleDateOrder}},\code{\link{lensDateOrder}}, 
+#' and \code{\link{sumobrainDateOrder}}.
+#' @param deduplicate A logical, default set to TRUE, if you want to deduplicated 
+#' any patent documents that have both an app and a grant. 
+#' @param cakcDict A county and kind code dictionary. Default is \code{\link{cakcDict}}.
+#' @param docLengthTypesDict A document length and type dictionary. Default is \code{\link{docLengthTypesDict}}.
+#' @param keepType A character variable denoting which document type to keep. Default is "grant". 
+#' If NA, ignore.
 #' 
-#' @return A data frame of cleaned up data. 
+#' @return A data frame of tidy patent data. 
 #' 
 #' @examples 
 #' 
@@ -562,7 +582,11 @@ cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
 #' For data formats: \code{\link{acars}} for Sumobrain, 
 #' \code{\link{acarsGoogle}} for Google Patents data, and \code{\link{acarsLens}} 
 #' for Lens.org data. 
-cleanPatentData <- function(patentData, columnsExpected, cleanNames){
+cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFields = NA,
+                            dateOrders, deduplicate = TRUE, 
+                            cakcDict = patentr::cakcDict, 
+                            docLengthTypesDict = patentr::docLengthTypesDict,
+                            keepType = "grant"){
 
   # header names  
   patentData <- cleanHeaderNames(patentData = patentData, 
@@ -570,15 +594,85 @@ cleanPatentData <- function(patentData, columnsExpected, cleanNames){
                                  cleanNames = cleanNames)
   
   # extract data from docNum 
+  if(!is.null(patentData$docNum)){
+    # remove white space from docNum as a precaution
+    patentData$docNum <- gsub(" ","", patentData$docNum)
+    patentData$countryCode <- extractCountryCode(patentData$docNum) # country code 
+    patentData$pubNum <- extractPubNumber(patentData$docNum)
+    # if kind code exists, trust that it is accurate and don't reinvent the wheel
+    if(is.null(patentData$kindCode)){
+      patentData$kindCode <- extractKindCode(patentData$docNum)
+    }
+    patentData$officeDocLength <- extractDocLength(countryCode = patentData$countryCode,
+                                                   pubNum = patentData$pubNum)
+    # print("patent data office doc length in main func")
+    # print(head(patentData$officeDocLength))
+    # print(table(patentData$officeDocLength))
+    
+    # document type, smartly guessed
+    patentData$countryAndKindCode <- with(patentData, paste0(countryCode, kindCode))
+    
+    # error is inside this function
+    patentData$docType <- generateDocType(officeDocLength = patentData$officeDocLength,
+                                          countryAndKindCode = patentData$countryAndKindCode,
+                                          cakcDict = cakcDict,
+                                          docLengthTypesDict = docLengthTypesDict)
+    
+    
+    
+    # remove duplicates
+    # Google export doesn't include dups and is by default ignored because 
+    # there is no appNum
+    if(deduplicate && !is.null(patentData$appNum)){
+      patentData$hasDup <- showDups(patentData$appNum)
+      toKeep <- removeDups(patentData$appNum, hasDup = patentData$hasDup,
+                           docType = patentData$docType, keepType = keepType)
+      # cut down the list
+      if(sum(!toKeep)>0) {print(paste("Removing",sum(!toKeep),"duplicated (grant, app, etc. matching pairs) rows."))}
+      patentData <- patentData[toKeep,]
+    }
+
+  }
   
+  # if dateFields exist, turn them into dates
+  if(sum(dateFields %in% names(patentData))==length(dateFields)){
+    patentData[dateFields] <- as.data.frame(lapply(patentData[dateFields],extractCleanDate, orders=dateOrders))  
+  }
+  
+  return(patentData)
+
 
 }
 
+# sdf <- as.data.frame(lapply(sumo[sumobrainDateFields],extractCleanDate, orders="ymd"))
+data(acars)
 sumo <- cleanPatentData(patentData = acars, columnsExpected = sumobrainColumns,
-                        cleanNames = sumobrainNames)
-google <- cleanPatentData(patentData = acarsGoogle, columnsExpected = googleColumns,
-                        cleanNames = googleNames)
-lens <- cleanPatentData(patentData = acarsLens, columnsExpected = lensColumns,
-                        cleanNames = lensNames)
+                        cleanNames = sumobrainNames,
+                        dateFields = sumobrainDateFields,
+                        dateOrders = sumobrainDateOrder,
+                        deduplicate = TRUE,
+                        cakcDict = patentr::cakcDict,
+                        docLengthTypesDict = patentr::docLengthTypesDict,
+                        keepType = "grant")
+
+#####
+# use a fresh Google export csv
+# in a new csv download, however, it would not be the case
+rawGoogleData <- read.csv("inst/extdata/google_autonomous_search.csv", stringsAsFactors = FALSE, skip = skipGoogle)
+google <- cleanPatentData(patentData = rawGoogleData, columnsExpected = googleColumns,
+                        cleanNames = googleNames,
+                        dateFields = googleDateFields,
+                        dateOrders = googleDateOrder)
+
+lensRawData <- read.csv("inst/extdata/lens_autonomous_search.csv", stringsAsFactors = FALSE, skip = skipLens)
+lens <- cleanPatentData(patentData = lensRawData, columnsExpected = lensColumns,
+                        cleanNames = lensNames,
+                        dateFields = lensDateFields,
+                        dateOrders = lensDateOrder)
+
+
 
 # test 1, names should match
+# test 2, docNum extracted values behave nicely
+# test 3, dedup is behaving nicely
+

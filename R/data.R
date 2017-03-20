@@ -448,3 +448,138 @@
 #' \code{\link{cleanNames}}
 #' 
 "assigneeStopWords"
+
+
+#' A simple list of date column names in sumobrain data.
+#'
+#'
+#' A character vector of date fields in sumobrain data.
+#'
+#'
+#' @name sumobrainDateFields
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector
+#'
+#' \describe{
+#' \item{sumobrainDateFields}{A character vector of date fields.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanHeaderNames}}
+#' 
+"sumobrainDateFields"
+
+
+#' A simple list of date column names in lens.org data.
+#'
+#'
+#' A character vector of date fields in lens.org data.
+#'
+#'
+#' @name lensDateFields
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector.
+#'
+#' \describe{
+#' \item{lensDateFields}{A character vector of date fields.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanHeaderNames}}
+#' 
+"lensDateFields"
+
+#' A simple list of date column names in Google patent data.
+#'
+#'
+#' A character vector of date fields in Google patent data.
+#'
+#'
+#' @name googleDateFields
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector.
+#'
+#' \describe{
+#' \item{googleDateFields}{A character vector of date fields.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanHeaderNames}}
+#' 
+"googleDateFields"
+
+
+#' Date order for sumobrain data.
+#'
+#'
+#' A date order to be used in sumobrain date data.
+#'
+#'
+#' @name sumobrainDateOrder
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character value.
+#'
+#' \describe{
+#' \item{sumobrainDateOrder}{A character variable of date order.}
+#' }
+#'
+#' @seealso
+#' \code{\link{extractCleanDate}}
+#' 
+"sumobrainDateOrder"
+
+#' Date order for lens.org data.
+#'
+#'
+#' A date order to be used in lens.org date data.
+#'
+#'
+#' @name lensDateOrder
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character value.
+#'
+#' \describe{
+#' \item{lensDateOrder}{A character variable of date order.}
+#' }
+#'
+#' @seealso
+#' \code{\link{extractCleanDate}}
+#' 
+"lensDateOrder"
+
+#' Date order for Google Patents data.
+#'
+#'
+#' A date order to be used in Google patent date data.
+#'
+#'
+#' @name googleDateOrder
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character value.
+#'
+#' \describe{
+#' \item{googleDateOrder}{A character variable of date order.}
+#' }
+#'
+#' @seealso
+#' \code{\link{extractCleanDate}}
+#' 
+"googleDateOrder"
