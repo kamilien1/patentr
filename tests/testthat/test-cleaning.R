@@ -107,5 +107,9 @@ test_that("generateDocType returns same length as number of rows of data frame",
 
 
 
-
-
+# names returns the same length
+test_that("Google URL vector returns same length as number of rows of data frame",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = 1)
+  df <- cleanHeaderNames(patentData = df)
+  expect_length(cleanNames(df$assignee), dim(df)[1])
+})

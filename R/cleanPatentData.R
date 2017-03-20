@@ -481,3 +481,58 @@ generateDocType <- function(officeDocLength, countryAndKindCode,
 
 }
 
+
+#' Clean up string names. 
+#' 
+#' @description Quick cleanup of characters in a string, 
+#' typically assignee (company names) and the inventors. 
+#' 
+#' This function: 
+#' \enumerate{
+#' \item{Removes values between spaces, such as (US)}
+#' \item{Changes all names to lower case}
+#' }
+#' 
+#' @param rawNames The character vector you want to clean up
+#' @param firstAssigneeOnly A logical value, default set to TRUE, keeping only the first 
+#' assignee if multiple exist. 
+#' @param sep The separating character for multiple assignees, default set to semi-colon.
+#' @param removeStopWords Logical default TRUE, if want to remove common company stopwords 
+#' found in the \code{stopWords} parameter. 
+#' @param stopWords An optional character vector of words you want to remove. Default to 
+#' \code{\link{assigneeStopWords}}.
+#' 
+#'  
+#' @return A character vector of cleaned up character names. 
+#' 
+#' @examples
+#' 
+#' assigneeNames <- cleanNames(acars$assignee)
+#' # get a feel for the less-messy data
+#' head(sort(table(assigneeNames), decreasing = TRUE))
+#' 
+#' @export
+#' 
+cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
+                       removeStopWords = TRUE,
+                       stopWords = patentr::assigneeStopWords){
+  
+  rawNames <- tolower(rawNames)
+  rawNames <- gsub("*\\(.*?\\) *", "", rawNames) # parentheses expressions
+  # custom sep
+  if (firstAssigneeOnly) {rawNames <- gsub(paste0("*",sep,".*"),"", rawNames) }
+  # remove commas, periods, and single quote '
+  # note, a stronger removal is gsub("[[:punct:]]","", rawNames)
+  rawNames <- gsub(",*\\.*\\'*","", rawNames)
+  
+  if(removeStopWords) {
+    stopWordsString <- paste0("",stopWords,"+|", collapse = "")
+    rawNames <- gsub(stopWordsString,"", rawNames)
+  }
+  
+  rawNames <- trimws(rawNames) # whitespace 
+
+  return(rawNames)
+}
+
+

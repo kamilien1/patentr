@@ -425,3 +425,26 @@
 
 
 
+
+#' A simple stop word list for assignee names.
+#'
+#'
+#' A character vector of common stop words to remove from assignee names for 
+#' name standardization, such as "inc".
+#'
+#'
+#' @name assigneeStopWords
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector
+#'
+#' \describe{
+#' \item{assigneeStopWords}{A character vector of stop words.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanNames}}
+#' 
+"assigneeStopWords"

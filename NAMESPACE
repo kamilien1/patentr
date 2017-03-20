@@ -2,6 +2,7 @@
 
 export(chooseFiles)
 export(cleanHeaderNames)
+export(cleanNames)
 export(createGoogleURL)
 export(extractCleanDate)
 export(extractCountryCode)
