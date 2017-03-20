@@ -60,7 +60,7 @@ importPatentData <- function(rawDataFilePath = NA, skipLines = 1){
 #' 
 #' @examples \dontrun{
 #' filePaths <- chooseFiles()
-#' allData <- readIpExcel(filePaths)
+#' allData <- importPatentData(filePaths)
 #' }
 #' @export
 #' 

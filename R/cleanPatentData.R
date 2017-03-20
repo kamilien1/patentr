@@ -38,6 +38,7 @@
 #' 
 #' @examples
 #' cleanData <- cleanHeaderNames(patentData = acars)
+#' cleanDataLens <- cleanHeaderNames(patentData = acarsLens, columnsExpected = lensColumns, cleanNames = lensNames)
 #' 
 #' @export
 #' 
@@ -282,7 +283,7 @@ createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://
 
 
 
-#' View all your duplicate entries to decide which to remove.
+#' View all your duplicate entries to decide which to remove
 #' 
 #' @description Return a logical vector of all duplicate entries. 
 #' 
@@ -718,7 +719,13 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
       if(sum(!toKeep)>0) {print(paste("Removing",sum(!toKeep),"duplicated (grant, app, etc. matching pairs) rows."))}
       patentData <- patentData[toKeep,]
     }
-
+    # make the google URL
+    patentData$googleURL <- createGoogleURL(countryCode = patentData$countryCode,
+                                            pubNum = patentData$pubNum,
+                                            kindCode = patentData$kindCode)
+    
+    
+  # end if is.null docNum
   }
   
   # if dateFields exist, turn them into dates
@@ -734,9 +741,15 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
                                            stopWords = stopWords)
   }
   
+  
+
+  
+  
+  
   return(patentData)
 }
 # test 1, names should match
 # test 2, docNum extracted values behave nicely
 # test 3, dedup is behaving nicely
+
 

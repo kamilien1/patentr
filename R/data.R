@@ -88,6 +88,7 @@
 #' A simple table that helps map the country code and length of the numeric portion 
 #' of the data to the type of document.
 #' 
+#' May need to add the USAPP for sumobrain. For now it is not needed. 
 #' 
 #' @name docLengthTypes
 #' @docType data
