@@ -423,7 +423,13 @@ removeDups <- function(input, hasDup = NA, docType = NA, keepType = "grant"){
 #' 
 #' Often times, data exports from publicly available sources do not provide the 
 #' type of patent document, or, if provided, still requires standardization. By 
-#' using the kind code, country code, 
+#' using the kind code, country code, and pre-developed dictionaries for doc length 
+#' and country code, you can get a great approximation of the types of documents. 
+#' 
+#' Note that you can use View(lens[lens$docType=="NA",]) to view the not-found 
+#' document types. Often times, these are small countries. You can add to the 
+#' \code{\link{cakcDict}} to fix these. They are also useful to ignore if you 
+#' only want to focus on the larger countries, which are all covered. 
 #' 
 #' @param officeDocLength The concat value of country code and number of numerical digits. 
 #' Extracted using the \code{\link{extractDocLength}} function.
@@ -448,6 +454,7 @@ removeDups <- function(input, hasDup = NA, docType = NA, keepType = "grant"){
 #'                             cakcDict = cakcDict,
 #'                             docLengthTypesDict = docLengthTypesDict)
 #' table(acars$docType)
+#' 
 #' 
 #' 
 #' @return A vector of characters labeling the document type, with NA for when 
@@ -478,7 +485,9 @@ generateDocType <- function(officeDocLength, countryAndKindCode,
   # warn user if not everything is fine
   if (foundValue < length(officeDocLength)) { 
     warning("In generateDocType, not all values were found. ",
-            length(officeDocLength)-foundValue," Values will be NA.")}
+            length(officeDocLength)-foundValue," Values will be NA. 
+            Use View(myDataFrame[myDataFrame$docType=='NA',]) to look
+            at the NA values.")}
 
   return(docType)
   
@@ -494,6 +503,11 @@ generateDocType <- function(officeDocLength, countryAndKindCode,
 #' 
 #' @description Quick cleanup of characters in a string, 
 #' typically assignee (company names) and the inventors. 
+#' 
+#' If you have issues with this, you may need to convert to UTF-8 or ASCII.
+#' Use the \code{iconv(thisVector, to="UTF-8")} or \code{to="ASCII"} and it should 
+#' fix the problem. See the examples for the code.
+#' 
 #' 
 #' This function: 
 #' \enumerate{
@@ -519,6 +533,15 @@ generateDocType <- function(officeDocLength, countryAndKindCode,
 #' # get a feel for the less-messy data
 #' head(sort(table(assigneeNames), decreasing = TRUE))
 #' 
+#' # for a messier example, note you need to convert to ASCII/UTF-8 to get rid of errors
+#' # associated with tolower
+#' rawGoogleData <- system.file("extdata", "google_autonomous_search.csv", package = "patentr")
+#' rawGoogleData <- read.csv(rawGoogleData, stringsAsFactors = FALSE, skip = patentr::skipGoogle)
+#' rawGoogleData <- data.frame(lapply(rawGoogleData, 
+#' function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+#' assigneeClean <- cleanNames(rawGoogleData$assignee)
+#' head(sort(table(assigneeClean), decreasing = TRUE))
+#' 
 #' @export
 #' 
 cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
@@ -534,7 +557,8 @@ cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
   rawNames <- gsub(",*\\.*\\'*","", rawNames)
   
   if(removeStopWords) {
-    stopWordsString <- paste0("",stopWords,"+|", collapse = "")
+    # https://regex101.com/r/fM7uA5/3 test here
+    stopWordsString <- paste0("",stopWords,"+$| ",stopWords," |",collapse="")
     rawNames <- gsub(stopWordsString,"", rawNames)
   }
   
@@ -571,11 +595,71 @@ cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
 #' @param docLengthTypesDict A document length and type dictionary. Default is \code{\link{docLengthTypesDict}}.
 #' @param keepType A character variable denoting which document type to keep. Default is "grant". 
 #' If NA, ignore.
+#' @param firstAssigneeOnly For cleaning names, use the first assignee only, default TRUE.
+#' @param assigneeSep The separation character if there is more than one assignee. Default 
+#' is ";" semicolon.
+#' @param stopWords The stopword list to remove from assignee names. Default is 
+#' \code{\link{assigneeStopWords}}.
 #' 
 #' @return A data frame of tidy patent data. 
 #' 
+#' @export
+#' 
 #' @examples 
 #' 
+#' 
+#' sumo <- cleanPatentData(patentData = patentr::acars, columnsExpected = sumobrainColumns,
+#' cleanNames = sumobrainNames,
+#' dateFields = sumobrainDateFields,
+#' dateOrders = sumobrainDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE, 
+#' assigneeSep = ";",
+#' stopWords = patentr::assigneeStopWords)
+#' 
+#' # use a fresh Google export csv
+#' # in a new csv download, however, it would not be the case
+#' 
+#' 
+#' rawGoogleData <- system.file("extdata", "google_autonomous_search.csv", 
+#' package = "patentr")
+#' rawGoogleData <- read.csv(rawGoogleData, 
+#' skip = skipGoogle, stringsAsFactors = FALSE)
+#' rawGoogleData <- data.frame(lapply(rawGoogleData, 
+#' function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+#' google <- cleanPatentData(patentData = rawGoogleData, columnsExpected = googleColumns,
+#' cleanNames = googleNames,
+#' dateFields = googleDateFields,
+#' dateOrders = googleDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE, 
+#' assigneeSep = ",",
+#' stopWords = patentr::assigneeStopWords)
+#' 
+#' 
+#' lensRawData <- system.file("extdata", "lens_autonomous_search.csv", 
+#' package = "patentr")
+#' lensRawData <- read.csv(lensRawData, stringsAsFactors = FALSE, skip = skipLens)
+#' lensRawData <- data.frame(lapply(lensRawData, 
+#' function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+#' lens <- cleanPatentData(patentData = lensRawData, columnsExpected = lensColumns,
+#' cleanNames = lensNames,
+#' dateFields = lensDateFields,
+#' dateOrders = lensDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE, 
+#' assigneeSep = ";;",
+#' stopWords = patentr::assigneeStopWords)
+
 #' 
 #' @seealso 
 #' 
@@ -586,7 +670,10 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
                             dateOrders, deduplicate = TRUE, 
                             cakcDict = patentr::cakcDict, 
                             docLengthTypesDict = patentr::docLengthTypesDict,
-                            keepType = "grant"){
+                            keepType = "grant",
+                            firstAssigneeOnly = TRUE, 
+                            assigneeSep = ";",
+                            stopWords = patentr::assigneeStopWords){
 
   # header names  
   patentData <- cleanHeaderNames(patentData = patentData, 
@@ -639,39 +726,16 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
     patentData[dateFields] <- as.data.frame(lapply(patentData[dateFields],extractCleanDate, orders=dateOrders))  
   }
   
+  # clean up assignee names 
+  if(!is.null(patentData$assignee)){
+    patentData$assigneeClean <- cleanNames(rawNames = patentData$assignee, 
+                                           firstAssigneeOnly = firstAssigneeOnly, 
+                                           sep = assigneeSep,
+                                           stopWords = stopWords)
+  }
+  
   return(patentData)
-
-
 }
-
-# sdf <- as.data.frame(lapply(sumo[sumobrainDateFields],extractCleanDate, orders="ymd"))
-data(acars)
-sumo <- cleanPatentData(patentData = acars, columnsExpected = sumobrainColumns,
-                        cleanNames = sumobrainNames,
-                        dateFields = sumobrainDateFields,
-                        dateOrders = sumobrainDateOrder,
-                        deduplicate = TRUE,
-                        cakcDict = patentr::cakcDict,
-                        docLengthTypesDict = patentr::docLengthTypesDict,
-                        keepType = "grant")
-
-#####
-# use a fresh Google export csv
-# in a new csv download, however, it would not be the case
-rawGoogleData <- read.csv("inst/extdata/google_autonomous_search.csv", stringsAsFactors = FALSE, skip = skipGoogle)
-google <- cleanPatentData(patentData = rawGoogleData, columnsExpected = googleColumns,
-                        cleanNames = googleNames,
-                        dateFields = googleDateFields,
-                        dateOrders = googleDateOrder)
-
-lensRawData <- read.csv("inst/extdata/lens_autonomous_search.csv", stringsAsFactors = FALSE, skip = skipLens)
-lens <- cleanPatentData(patentData = lensRawData, columnsExpected = lensColumns,
-                        cleanNames = lensNames,
-                        dateFields = lensDateFields,
-                        dateOrders = lensDateOrder)
-
-
-
 # test 1, names should match
 # test 2, docNum extracted values behave nicely
 # test 3, dedup is behaving nicely

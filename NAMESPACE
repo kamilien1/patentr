@@ -3,6 +3,7 @@
 export(chooseFiles)
 export(cleanHeaderNames)
 export(cleanNames)
+export(cleanPatentData)
 export(createGoogleURL)
 export(extractCleanDate)
 export(extractCountryCode)

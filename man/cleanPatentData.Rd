@@ -7,7 +7,9 @@
 cleanPatentData(patentData = NULL, columnsExpected, cleanNames,
   dateFields = NA, dateOrders, deduplicate = TRUE,
   cakcDict = patentr::cakcDict,
-  docLengthTypesDict = patentr::docLengthTypesDict, keepType = "grant")
+  docLengthTypesDict = patentr::docLengthTypesDict, keepType = "grant",
+  firstAssigneeOnly = TRUE, assigneeSep = ";",
+  stopWords = patentr::assigneeStopWords)
 }
 \arguments{
 \item{patentData}{The data frame of initial raw patent data.}
@@ -34,6 +36,14 @@ any patent documents that have both an app and a grant.}
 
 \item{keepType}{A character variable denoting which document type to keep. Default is "grant". 
 If NA, ignore.}
+
+\item{firstAssigneeOnly}{For cleaning names, use the first assignee only, default TRUE.}
+
+\item{assigneeSep}{The separation character if there is more than one assignee. Default 
+is ";" semicolon.}
+
+\item{stopWords}{The stopword list to remove from assignee names. Default is 
+\code{\link{assigneeStopWords}}.}
 }
 \value{
 A data frame of tidy patent data.
@@ -50,6 +60,58 @@ read carefully to create your own.
 }
 \examples{
 
+
+sumo <- cleanPatentData(patentData = patentr::acars, columnsExpected = sumobrainColumns,
+cleanNames = sumobrainNames,
+dateFields = sumobrainDateFields,
+dateOrders = sumobrainDateOrder,
+deduplicate = TRUE,
+cakcDict = patentr::cakcDict,
+docLengthTypesDict = patentr::docLengthTypesDict,
+keepType = "grant",
+firstAssigneeOnly = TRUE, 
+assigneeSep = ";",
+stopWords = patentr::assigneeStopWords)
+
+# use a fresh Google export csv
+# in a new csv download, however, it would not be the case
+
+
+rawGoogleData <- system.file("extdata", "google_autonomous_search.csv", 
+package = "patentr")
+rawGoogleData <- read.csv(rawGoogleData, 
+skip = skipGoogle, stringsAsFactors = FALSE)
+rawGoogleData <- data.frame(lapply(rawGoogleData, 
+function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+google <- cleanPatentData(patentData = rawGoogleData, columnsExpected = googleColumns,
+cleanNames = googleNames,
+dateFields = googleDateFields,
+dateOrders = googleDateOrder,
+deduplicate = TRUE,
+cakcDict = patentr::cakcDict,
+docLengthTypesDict = patentr::docLengthTypesDict,
+keepType = "grant",
+firstAssigneeOnly = TRUE, 
+assigneeSep = ",",
+stopWords = patentr::assigneeStopWords)
+
+
+lensRawData <- system.file("extdata", "lens_autonomous_search.csv", 
+package = "patentr")
+lensRawData <- read.csv(lensRawData, stringsAsFactors = FALSE, skip = skipLens)
+lensRawData <- data.frame(lapply(lensRawData, 
+function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+lens <- cleanPatentData(patentData = lensRawData, columnsExpected = lensColumns,
+cleanNames = lensNames,
+dateFields = lensDateFields,
+dateOrders = lensDateOrder,
+deduplicate = TRUE,
+cakcDict = patentr::cakcDict,
+docLengthTypesDict = patentr::docLengthTypesDict,
+keepType = "grant",
+firstAssigneeOnly = TRUE, 
+assigneeSep = ";;",
+stopWords = patentr::assigneeStopWords)
 
 }
 \seealso{

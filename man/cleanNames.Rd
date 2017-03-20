@@ -28,6 +28,11 @@ A character vector of cleaned up character names.
 Quick cleanup of characters in a string, 
 typically assignee (company names) and the inventors. 
 
+If you have issues with this, you may need to convert to UTF-8 or ASCII.
+Use the \code{iconv(thisVector, to="UTF-8")} or \code{to="ASCII"} and it should 
+fix the problem. See the examples for the code.
+
+
 This function: 
 \enumerate{
 \item{Removes values between spaces, such as (US)}
@@ -39,5 +44,14 @@ This function:
 assigneeNames <- cleanNames(acars$assignee)
 # get a feel for the less-messy data
 head(sort(table(assigneeNames), decreasing = TRUE))
+
+# for a messier example, note you need to convert to ASCII/UTF-8 to get rid of errors
+# associated with tolower
+rawGoogleData <- system.file("extdata", "google_autonomous_search.csv", package = "patentr")
+rawGoogleData <- read.csv(rawGoogleData, stringsAsFactors = FALSE, skip = patentr::skipGoogle)
+rawGoogleData <- data.frame(lapply(rawGoogleData, 
+function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+assigneeClean <- cleanNames(rawGoogleData$assignee)
+head(sort(table(assigneeClean), decreasing = TRUE))
 
 }

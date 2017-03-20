@@ -113,3 +113,51 @@ test_that("Google URL vector returns same length as number of rows of data frame
   df <- cleanHeaderNames(patentData = df)
   expect_length(cleanNames(df$assignee), dim(df)[1])
 })
+
+
+# sumobrain full clean returns data frame
+test_that("Sumobrain data cleanPatentData returns a data frame.",{
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = skipSumobrain)
+  df <- cleanPatentData(patentData = df, columnsExpected = sumobrainColumns,
+                        cleanNames = sumobrainNames, dateFields = sumobrainDateFields,
+                        dateOrders = sumobrainDateOrder, deduplicate = TRUE,
+                        cakcDict = cakcDict, docLengthTypesDict = docLengthTypesDict,
+                        keepType = "grant",firstAssigneeOnly = TRUE, assigneeSep = ";",
+                        stopWords = assigneeStopWords)
+  # should be of type logical
+  expect_is(df ,"data.frame")
+})
+
+# google patent data full clean returns data frame
+test_that("Google patent data cleanPatentData returns a data frame.",{
+  df <- read.csv(rprojroot::find_testthat_root_file("testData","google_autonomous_search.csv"), 
+                 skip = skipGoogle, stringsAsFactors = FALSE)
+  df <- data.frame(lapply(df,function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+  
+  df <- cleanPatentData(patentData = df, columnsExpected = googleColumns,
+                        cleanNames = googleNames, dateFields = googleDateFields,
+                        dateOrders = googleDateOrder, deduplicate = TRUE,
+                        cakcDict = cakcDict, docLengthTypesDict = docLengthTypesDict,
+                        keepType = "grant",firstAssigneeOnly = TRUE, assigneeSep = ",",
+                        stopWords = assigneeStopWords)
+  # should be of type logical
+  expect_is(df ,"data.frame")
+})
+
+
+# lens.org data file 
+test_that("Lens.org patent data cleanPatentData returns a data frame.",{
+  df <- read.csv(rprojroot::find_testthat_root_file("testData","lens_autonomous_search.csv"), 
+                 skip = skipLens, stringsAsFactors = FALSE)
+  df <- data.frame(lapply(df,function(x){iconv(x, to = "ASCII")}), stringsAsFactors = FALSE)
+  
+  df <- cleanPatentData(patentData = df, columnsExpected = lensColumns,
+                        cleanNames = lensNames, dateFields = lensDateFields,
+                        dateOrders = lensDateOrder, deduplicate = TRUE,
+                        cakcDict = cakcDict, docLengthTypesDict = docLengthTypesDict,
+                        keepType = "grant",firstAssigneeOnly = TRUE, assigneeSep = ";;",
+                        stopWords = assigneeStopWords)
+  # should be of type logical
+  expect_is(df ,"data.frame")
+})
+

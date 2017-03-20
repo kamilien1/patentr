@@ -29,7 +29,13 @@ Determine the type of document from the patent publication data.
 
 Often times, data exports from publicly available sources do not provide the 
 type of patent document, or, if provided, still requires standardization. By 
-using the kind code, country code,
+using the kind code, country code, and pre-developed dictionaries for doc length 
+and country code, you can get a great approximation of the types of documents. 
+
+Note that you can use View(lens[lens$docType=="NA",]) to view the not-found 
+document types. Often times, these are small countries. You can add to the 
+\code{\link{cakcDict}} to fix these. They are also useful to ignore if you 
+only want to focus on the larger countries, which are all covered.
 }
 \examples{
 
@@ -46,6 +52,7 @@ acars$docType <- generateDocType(officeDocLength = acars$officeDocLength,
                             cakcDict = cakcDict,
                             docLengthTypesDict = docLengthTypesDict)
 table(acars$docType)
+
 
 
 }

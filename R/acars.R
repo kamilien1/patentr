@@ -63,6 +63,8 @@
 #' 
 #' \code{temp <- system.file("extdata", "google_autonomous_search.csv", package = "patentr")}
 #' 
+#' \code{# from the source package you can navigate to }
+#' 
 #' \code{temp <- read.csv("inst/extdata/google_autonomous_search.csv", skip = 1, stringsAsFactors = FALSE)}
 #' 
 #' \code{names(temp) <- googleNames}
