@@ -62,6 +62,9 @@ cleanHeaderNames <- function(patentData = NA, columnsExpected = patentr::sumobra
   if(is.data.frame(patentData) && dim(patentData)[2] == columnsExpected &&
      length(cleanNames)==columnsExpected){
     names(patentData) <- cleanNames
+  } else {
+    warning("Warning. Unexpected data in cleanHeaderNames. Check to make sure 
+            columnsExpected and length(cleanNames) match.")
   }
   return(patentData)
 }
@@ -536,3 +539,46 @@ cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
 }
 
 
+#' Generate a clean data set from the imported raw data. 
+#' 
+#' @description Generate a clean data set from the imported raw data set. The 
+#' data available dictates the number of columns of attributes that can be 
+#' generated.
+#' 
+#' Sumobrain, Lens.org, and Google Patents have varying levels of data available. 
+#' 
+#' If you import your own data, be sure to adhere to the template format, or 
+#' read carefully to create your own. 
+#' 
+#' @param patentData The data frame of initial raw patent data. 
+#' 
+#' @return A data frame of cleaned up data. 
+#' 
+#' @examples 
+#' 
+#' 
+#' @seealso 
+#' 
+#' For data formats: \code{\link{acars}} for Sumobrain, 
+#' \code{\link{acarsGoogle}} for Google Patents data, and \code{\link{acarsLens}} 
+#' for Lens.org data. 
+cleanPatentData <- function(patentData, columnsExpected, cleanNames){
+
+  # header names  
+  patentData <- cleanHeaderNames(patentData = patentData, 
+                                 columnsExpected = columnsExpected,
+                                 cleanNames = cleanNames)
+  
+  # extract data from docNum 
+  
+
+}
+
+sumo <- cleanPatentData(patentData = acars, columnsExpected = sumobrainColumns,
+                        cleanNames = sumobrainNames)
+google <- cleanPatentData(patentData = acarsGoogle, columnsExpected = googleColumns,
+                        cleanNames = googleNames)
+lens <- cleanPatentData(patentData = acarsLens, columnsExpected = lensColumns,
+                        cleanNames = lensNames)
+
+# test 1, names should match
