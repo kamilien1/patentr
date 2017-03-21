@@ -302,3 +302,82 @@ capWord <- function(s){
 }
 
 
+
+
+#' Make a facet tile plot to view two features.
+#' 
+#' @description Scan for patent market gaps. 
+#' Visualize the features of a set of patents by a category. 
+#' 
+#' Quickly scan this chart to look for gaps in the feature sets. 
+#' 
+#' @param df The patent data frame you want to graph.
+#' @param xVal The x value you will be plotting, a character value that is a 
+#' name of \code{df}.
+#' @param tileVal The tile value you will be plotting, a character value that is a 
+#' name of \code{df}.
+#' 
+#' 
+#' @return A ggplot2 facet plot object. 
+#' 
+#' @examples 
+#' 
+#' sumo <- cleanPatentData(patentData = patentr::acars, columnsExpected = sumobrainColumns,
+#' cleanNames = sumobrainNames,
+#' dateFields = sumobrainDateFields,
+#' dateOrders = sumobrainDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE,
+#' assigneeSep = ";",
+#' stopWords = patentr::assigneeStopWords)
+#' 
+#' # note that in reality, you need a patent analyst to carefully score
+#' # these patents, the score here is for demonstrational purposes
+#' score <- round(rnorm(dim(sumo)[1],mean=1.4,sd=0.9))
+#' score[score>3] <- 3; score[score<0] <- 0
+#' sumo$score <- score
+#' sumo$assigneeSmall <- strtrim(sumo$assigneeClean,12)
+#' category <- c("system","control algorithm","product","control system", "communication")
+#' c <- round(rnorm(dim(sumo)[1],mean=2.5,sd=1.5))
+#' c[c>5] <- 5; c[c<1] <- 1
+#' sumo$category <- category[c]
+#' feature1 <- c("adaptive", "park", "lane", NA,NA,NA,NA,NA, 
+#' "brake", "steer","accelerate","deactivate")
+#' f <- round(rnorm(dim(sumo)[1],mean=5,sd=1))
+#' l <- length(feature1)
+#' f[f>l] <- l; f[f<1] <- 1
+#' sumo$feature1 <- c(feature1,feature1[f])[1:dim(sumo)[1]]
+#' 
+#' tilePlot(sumo, "category", "feature1")
+#' 
+#' 
+#' 
+#' @importFrom magrittr %>%
+#' @import ggplot2
+#' @importFrom dplyr select_
+#' 
+#' @export
+#' 
+tilePlot <- function(df, xVal, tileVal){
+  
+  temp <- df %>% select_(.dots=c(xVal, tileVal))
+  temp <- temp[stats::complete.cases(temp),]
+  
+  # may need to hardcode value
+  plotTile <- ggplot(temp,aes_string(x = xVal,y = tileVal, height=1)) +
+    geom_tile(aes_string(fill = xVal)) +
+    ggtitle('') + 
+    guides(fill = F) + 
+    xlab(capWord(xVal)) +
+    ylab(capWord(tileVal))
+  
+  return(plotTile)
+  
+  
+}
+
+
+
