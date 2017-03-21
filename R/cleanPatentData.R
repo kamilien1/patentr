@@ -526,7 +526,7 @@ cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
   }
   
   rawNames <- trimws(rawNames) # whitespace 
-
+  rawNames[is.na(rawNames)] <- "NA" # replace NA with string val
   return(rawNames)
 }
 
