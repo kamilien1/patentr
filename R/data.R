@@ -585,3 +585,27 @@
 #' \code{\link{extractCleanDate}}
 #' 
 "googleDateOrder"
+
+
+
+#' Score colors used in graphing.
+#'
+#'
+#' A character vector of Hexadecimal score colors.
+#'
+#'
+#' @name scoreColors
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector. 
+#'
+#' \describe{
+#' \item{scoreColors}{A character variable of four score colors for 0 to 3.}
+#' }
+#'
+#' @seealso
+#' \code{\link{flippedHistogram}}
+#' 
+"scoreColors"
