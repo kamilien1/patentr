@@ -4,7 +4,8 @@
 \alias{tilePlot}
 \title{Make a facet tile plot to view two features.}
 \usage{
-tilePlot(df, xVal, tileVal)
+tilePlot(df, xVal, tileVal, fillVal = NA, xangle = 0, xhjust = 0.5,
+  showLegend = FALSE, facetVal = NA, fscale = c("free", "fixed"))
 }
 \arguments{
 \item{df}{The patent data frame you want to graph.}
@@ -14,13 +15,33 @@ name of \code{df}.}
 
 \item{tileVal}{The tile value you will be plotting, a character value that is a 
 name of \code{df}.}
+
+\item{fillVal}{An optional value for filling the color of the tiles on a third 
+variable. Default set to \code{NA} and evaluates to \code{xVal}.}
+
+\item{xangle}{A numeric 0 to 360 value for the angle of the x axis text}
+
+\item{xhjust}{Double value between 0 and 1. 0 Means left justified, 1 means right justified,
+default set to 0.5 (middle), for the x axis text.}
+
+\item{showLegend}{A logical to allow you to show or hide the legend, which is 
+mapped to the fillVal}
+
+\item{facetVal}{Optional faceting. 
+A character string of the facet you want for your plot, must be a 
+name of the header in \code{df}. Default set to \code{NA}.}
+
+\item{fscale}{Facet scale, a character value chosen from \code{c("free","fixed")}.
+Default set to \code{fixed}. It changes the y axis to adjust to each facet 
+and drop unused y (tile) values or keeps them all constant.}
 }
 \value{
 A ggplot2 facet plot object.
 }
 \description{
 Scan for patent market gaps. 
-Visualize the features of a set of patents by a category. 
+Visualize the features of a set of patents by a category. Can view up to 
+four dimensions of data with this plot (x, y, and optionals fill and facet).
 
 Quickly scan this chart to look for gaps in the feature sets.
 }
@@ -57,6 +78,16 @@ sumo$feature1 <- c(feature1,feature1[f])[1:dim(sumo)[1]]
 
 tilePlot(sumo, "category", "feature1")
 
+tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+xangle=90, xhjust=0, showLegend = TRUE)
 
+tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+xangle=90, xhjust=0, showLegend = TRUE, facetVal = "docType", fscale = "fixed")
+
+tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+xangle=90, xhjust=0, showLegend = TRUE, facetVal = "docType", fscale = "free")
+
+tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+xangle=90, xhjust=0, showLegend = TRUE, facetVal = "score", fscale = "free")
 
 }

@@ -307,7 +307,8 @@ capWord <- function(s){
 #' Make a facet tile plot to view two features.
 #' 
 #' @description Scan for patent market gaps. 
-#' Visualize the features of a set of patents by a category. 
+#' Visualize the features of a set of patents by a category. Can view up to 
+#' four dimensions of data with this plot (x, y, and optionals fill and facet).
 #' 
 #' Quickly scan this chart to look for gaps in the feature sets. 
 #' 
@@ -316,6 +317,19 @@ capWord <- function(s){
 #' name of \code{df}.
 #' @param tileVal The tile value you will be plotting, a character value that is a 
 #' name of \code{df}.
+#' @param fillVal An optional value for filling the color of the tiles on a third 
+#' variable. Default set to \code{NA} and evaluates to \code{xVal}.
+#' @param xangle A numeric 0 to 360 value for the angle of the x axis text 
+#' @param xhjust Double value between 0 and 1. 0 Means left justified, 1 means right justified,
+#' default set to 0.5 (middle), for the x axis text.
+#' @param showLegend A logical to allow you to show or hide the legend, which is 
+#' mapped to the fillVal 
+#' @param facetVal Optional faceting. 
+#' A character string of the facet you want for your plot, must be a 
+#' name of the header in \code{df}. Default set to \code{NA}. 
+#' @param fscale Facet scale, a character value chosen from \code{c("free","fixed")}.
+#' Default set to \code{fixed}. It changes the y axis to adjust to each facet 
+#' and drop unused y (tile) values or keeps them all constant. 
 #' 
 #' 
 #' @return A ggplot2 facet plot object. 
@@ -353,31 +367,54 @@ capWord <- function(s){
 #' 
 #' tilePlot(sumo, "category", "feature1")
 #' 
+#' tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+#' xangle=90, xhjust=0, showLegend = TRUE)
 #' 
+#' tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+#' xangle=90, xhjust=0, showLegend = TRUE, facetVal = "docType", fscale = "fixed")
 #' 
-#' @importFrom magrittr %>%
+#' tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+#' xangle=90, xhjust=0, showLegend = TRUE, facetVal = "docType", fscale = "free")
+#' 
+#' tilePlot(sumo, xVal = "assigneeSmall", tileVal = "feature1", fillVal = "category",
+#' xangle=90, xhjust=0, showLegend = TRUE, facetVal = "score", fscale = "free")
+
+#' 
 #' @import ggplot2
 #' @importFrom dplyr select_
 #' 
 #' @export
 #' 
-tilePlot <- function(df, xVal, tileVal){
+tilePlot <- function(df, xVal, tileVal, fillVal = NA, xangle = 0, xhjust = 0.5,
+                     showLegend = FALSE, facetVal = NA, fscale = c("free","fixed")){
   
-  temp <- df %>% select_(.dots=c(xVal, tileVal))
-  temp <- temp[stats::complete.cases(temp),]
+  # fillVal becomes tileVal in the event of it being blank
+  fillVal <- ifelse(is.na(fillVal), yes = xVal, fillVal)
+  
+  temp <- df[stats::complete.cases(select_(df, .dots=c(xVal, tileVal, fillVal))),]
+  
   
   # may need to hardcode value
   plotTile <- ggplot(temp,aes_string(x = xVal,y = tileVal, height=1)) +
-    geom_tile(aes_string(fill = xVal)) +
+    # fill was xVal
+    geom_tile(aes_string(fill = fillVal)) +
     ggtitle('') + 
-    guides(fill = F) + 
+    guides(fill = ifelse(showLegend, guide_legend(), FALSE)) + 
     xlab(capWord(xVal)) +
-    ylab(capWord(tileVal))
+    ylab(capWord(tileVal)) +
+    theme(axis.text.x = element_text(angle = xangle,hjust = xhjust))
+  
+  # note this includes the unwanted NA values, you may want to pre-filter
+  if(!is.na(facetVal) && facetVal %in% names(df)){
+    plotTile <- plotTile + 
+      facet_wrap(stats::as.formula(paste("~ ",facetVal)), scales=fscale[1]) 
+  }
   
   return(plotTile)
   
   
 }
+
 
 
 
