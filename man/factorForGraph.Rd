@@ -4,7 +4,7 @@
 \alias{factorForGraph}
 \title{Factor one column by another column's popularity}
 \usage{
-factorForGraph(df, xVal, fillVal)
+factorForGraph(df, xVal, fillVal, decFill = TRUE)
 }
 \arguments{
 \item{df}{A data frame containing the x and fill value columns.}
@@ -16,9 +16,11 @@ the x value in a ggplot2 plot.}
 \item{fillVal}{A character value from a header name in \code{df} 
 that will be used as the 
 fill value in a ggplot2 plot.}
+
+\item{decFill}{Sort fill value in decreasing order.}
 }
 \value{
-A data frame with one factored column.
+A data frame with two of the columns factored.
 }
 \description{
 Factor (or refactor) a data frame of values to be used 

@@ -17,9 +17,10 @@
 #' @param fillVal A character value from a header name in \code{df} 
 #' that will be used as the 
 #' fill value in a ggplot2 plot.
+#' @param decFill Sort fill value in decreasing order. 
 #' 
 #' 
-#' @return A data frame with one factored column. 
+#' @return A data frame with two of the columns factored.
 #' 
 #' @examples 
 #' 
@@ -51,16 +52,21 @@
 #' 
 #' @export
 #' 
-factorForGraph <- function(df, xVal, fillVal){
+factorForGraph <- function(df, xVal, fillVal, decFill = TRUE){
+  
+ 
   
   # need to unlist the list, then factor it
   df[ , fillVal] <- factor(unlist(df[ , fillVal]))
-  
+  df[ , fillVal] <- factor(df[, fillVal], 
+                           levels = sort(levels(df[,fillVal]), decreasing = decFill))
   # factor the xVal in order from most to least
   # group by xVal, get the total
   # and then factor xVal with levels equal to the order of xVal
   temp <- summarizeColumns(df, xVal)
+  
   df[,xVal] <- factor(unlist(df[,xVal]), levels = as.character(unlist(temp[ , xVal])))
+  
   df
 }
 
@@ -114,20 +120,23 @@ factorForGraph <- function(df, xVal, fillVal){
 #' @export
 #' 
 #' 
-flippedHistogram <- function(df, xVal, fillVal, colors= patentr::scoreColors){
+flippedHistogram <- function(df, xVal, fillVal, colors = patentr::scoreColors){
   
   # order the graph appropriately  
   df <- factorForGraph(df, xVal, fillVal)
 
-  ggplot(df, aes_string(x=xVal, 
-                        fill=fillVal )) + 
-    geom_bar() + coord_flip()+
-    scale_fill_manual("Score", values= colors, drop = F)+
+  ggplot(df, aes_string(x = xVal, fill = fillVal )) + 
+    geom_bar() + 
+    coord_flip() +
+    scale_fill_manual("Score", values= colors, drop = F) +
     theme(legend.position='bottom',
           axis.text = element_text(size=16),
           axis.title = element_text(size=16),
           legend.text = element_text(size=12),
           legend.title = element_text(size=12))+
-    xlab('')+ylab("Document Count")
+    xlab('') +
+    ylab("Document Count")
   
 }
+
+
