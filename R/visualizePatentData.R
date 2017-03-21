@@ -86,9 +86,12 @@ factorForGraph <- function(df, xVal, fillVal, decFill = TRUE){
 #' @param fillVal A character value of a name in \code{df} to color the chart.
 #' @param colors A character vector of colors, the same length as the number of 
 #' unique values in the column of \code{xVal[,fillVal]}. Default set to 
-#' \code{scoreColors}
+#' \code{scoreColors}.
 #' @param recolor A logical allowing you to choose to recolor the plot if the 
-#' colors vector is not applicable to you. Default set to \code{FALSE}.
+#' colors vector is not applicable to you. Default set to \code{FALSE}. Uses 
+#' the helper function \code{\link{makeColors}} to generate colors. Note that your 
+#' plot may fail if \code{colors} is not the same length as the number of unique 
+#' values in fillVal and \code{recolor} is set to \code{FALSE}.
 #' 
 #' @return A plot
 #' 
@@ -126,6 +129,8 @@ factorForGraph <- function(df, xVal, fillVal, decFill = TRUE){
 #' @export
 #' 
 #' 
+#' @seealso \code{\link{makeColors}}, \code{\link{capWord}}
+#' 
 flippedHistogram <- function(df, xVal, fillVal, colors = patentr::scoreColors,
                              recolor = FALSE){
   
@@ -148,8 +153,7 @@ flippedHistogram <- function(df, xVal, fillVal, colors = patentr::scoreColors,
           legend.title = element_text(size=12))+
     xlab('') +
     ylab("Document Count") +  
-    scale_fill_manual(gsub("^([[:alpha:]])", "\\U\\1", fillVal, perl=TRUE), 
-                                                values = colors, drop = F)
+    scale_fill_manual(capWord(fillVal), values = colors, drop = F)
   
   return(plot)
   
@@ -178,3 +182,123 @@ makeColors <- function(numColors){
   hues = seq(15, 375, length = numColors + 1)
   grDevices::hcl(h = hues, l = 65, c = 100)[1:numColors]
 }
+
+#' Make a tiled plot
+#' 
+#' @description Tile plot an x and y variable by facet z. 
+#' 
+#' Tile plots are a a great way to show a dense amount of information in one 
+#' plot sequence. Plotting document count by category, and plotting by assignee, 
+#' is one example. 
+#' 
+#' @param df A data frame of the cleaned data you want to plot. 
+#' @param xVal A character string of the x value you want for your plot, must be a 
+#' name of the header in \code{df}.
+#' @param fillVal A character string of the fill value you want for your plot, must be a 
+#' name of the header in \code{df}.
+#' @param facetVal A character string of the facet you want for your plot, must be a 
+#' name of the header in \code{df}.
+#' @param colors A character vector of colors, the same length as the number of 
+#' unique values in the column of \code{xVal[,fillVal]}. Default set to 
+#' \code{scoreColors}.
+#' @param recolor A logical allowing you to choose to recolor the plot if the 
+#' colors vector is not applicable to you. Default set to \code{FALSE}. Uses 
+#' the helper function \code{\link{makeColors}} to generate colors. Note that your 
+#' plot may fail if \code{colors} is not the same length as the number of unique 
+#' values in fillVal and \code{recolor} is set to \code{FALSE}.
+#' 
+#' @return A ggplot2 plot object.
+#' 
+#' @examples 
+#' 
+#' \dontrun{
+#' sumo <- cleanPatentData(patentData = patentr::acars, columnsExpected = sumobrainColumns,
+#' cleanNames = sumobrainNames,
+#' dateFields = sumobrainDateFields,
+#' dateOrders = sumobrainDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE,
+#' assigneeSep = ";",
+#' stopWords = patentr::assigneeStopWords)
+#' 
+#' # note that in reality, you need a patent analyst to carefully score
+#' # these patents, the score here is for demonstrational purposes
+#' score <- round(rnorm(dim(sumo)[1],mean=1.4,sd=0.9))
+#' score[score>3] <- 3; score[score<0] <- 0
+#' sumo$score <- score
+#' sumo$assigneeSmall <- strtrim(sumo$assigneeClean,12)
+#' category <- c("system","control algorithm","product","control system", "communication")
+#' c <- round(rnorm(dim(sumo)[1],mean=2.5,sd=1.5))
+#' c[c>5] <- 5; c[c<1] <- 1
+#' sumo$category <- category[c]
+#' 
+#' xVal = "category"
+#' fillVal = "score"
+#' facetVal = "assigneeSmall"
+#' 
+#' facetPlot(subset(sumo, score > 0), xVal, fillVal, facetVal, colors = patentr::scoreColors,
+#'           recolor = FALSE)
+#' }
+#' 
+#' @export
+#' 
+#' @import ggplot2
+#' 
+facetPlot <- function(df, xVal, fillVal, facetVal, colors = patentr::scoreColors,
+                      recolor = FALSE){
+  
+  df <- factorForGraph(df, xVal, fillVal)
+  
+  # sanity check for colors
+  if (length(colors) != length(unique(df[,fillVal])) && recolor){
+    colors <- makeColors(length(unique(df[,fillVal])))
+  }
+  
+  plot <- ggplot(df, aes_string(x = xVal, fill = fillVal)) +
+    geom_bar(stat = 'count') +
+    facet_wrap(stats::as.formula(paste("~ ",facetVal)), scales='free') +
+    scale_fill_manual(capWord(fillVal), values=colors, drop=F)+
+    xlab(capWord(xVal)) +
+    ylab("Document Count") +
+    theme(axis.text.x=element_text(angle = 20, hjust = 0.5, vjust = 0.5)) 
+  
+  return(plot)
+  
+}
+
+
+
+
+
+
+
+#' Capitalize the first letter of a character
+#' 
+#' @description A quick shortcut function to capitalize the first letter 
+#' of a character. Useful for making data frame column names quickly look like 
+#' plain english.
+#' 
+#' @param s Character string to input. Default set to \code{"word"}.
+#' 
+#' @return A character string with the first letter capitalized. 
+#' 
+#' @examples 
+#' 
+#' capWord("hello")
+#' capWord("")
+#' capWord("Hi")
+#' 
+#' @export
+#' 
+#' @seealso \code{\link{flippedHistogram}}
+#'  
+#'
+#'  
+capWord <- function(s){
+  gsub("^([[:alpha:]])", "\\U\\1", s, perl=TRUE)   
+}
+
+
