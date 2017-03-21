@@ -74,6 +74,7 @@ createGoogleURL <- function(countryCode, pubNum, kindCode,
 #' 
 #' @examples 
 #' 
+#' \dontrun{
 #' # works for USA
 #' aclaim <- getClaimFromURL("https://patents.google.com/patent/US8818682B1/en")
 #' print(aclaim)
@@ -87,6 +88,7 @@ createGoogleURL <- function(countryCode, pubNum, kindCode,
 #' cnclaim <- getClaimFromURL("https://patents.google.com/patent/CN104786953A/en")
 #' jpclaim <- getClaimFromURL("https://patents.google.com/patent/JP2016173842A/en")
 #' declaim <- getClaimFromURL("https://patents.google.com/patent/DE102014219223A1/en")
+#' }
 #' 
 #' @export
 #' 
@@ -229,6 +231,7 @@ cleanGoogleURL <- function(googleURL, langCode="en"){
 #' 
 #' @examples 
 #' 
+#' \dontrun{
 #' cc <- extractCountryCode(acars$docNum)
 #' pn <- extractPubNumber(acars$docNum)
 #' kc <- extractKindCode(acars$docNum)
@@ -236,7 +239,7 @@ cleanGoogleURL <- function(googleURL, langCode="en"){
 #' urls <- urls[1:4]
 #' clms <- getClaimsText(urls)
 #' clms[1]
-#' 
+#' }
 #' @seealso \code{\link{createGoogleURL}}, \code{\link{cleanGoogleURL}},
 #' \code{\link{getClaimFromURL}}
 #' 

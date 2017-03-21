@@ -32,6 +32,7 @@ string returns.
 }
 \examples{
 
+\dontrun{
 # works for USA
 aclaim <- getClaimFromURL("https://patents.google.com/patent/US8818682B1/en")
 print(aclaim)
@@ -45,6 +46,7 @@ krclaim <- getClaimFromURL("https://patents.google.com/patent/KR20150127745A/en"
 cnclaim <- getClaimFromURL("https://patents.google.com/patent/CN104786953A/en")
 jpclaim <- getClaimFromURL("https://patents.google.com/patent/JP2016173842A/en")
 declaim <- getClaimFromURL("https://patents.google.com/patent/DE102014219223A1/en")
+}
 
 }
 \seealso{

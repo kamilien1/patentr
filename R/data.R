@@ -609,3 +609,24 @@
 #' \code{\link{flippedHistogram}}
 #' 
 "scoreColors"
+
+
+#' A standard list of words to exclude in a patent word cloud.
+#'
+#'
+#' A standard list of words to exclude from a patent data word cloud.
+#'
+#'
+#' @name excludeWords
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector. 
+#'
+#' \describe{
+#' \item{excludeWords}{A character vector of words to exclude}
+#' }
+#'
+#' 
+"excludeWords"
