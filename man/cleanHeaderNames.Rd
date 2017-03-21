@@ -51,6 +51,8 @@ your search, and click "Download (CSV)" in the upper left-hand corner.
 }
 \examples{
 cleanData <- cleanHeaderNames(patentData = acars)
+cleanDataLens <- cleanHeaderNames(patentData = acarsLens, 
+columnsExpected = lensColumns, cleanNames = lensNames)
 
 }
 \seealso{
