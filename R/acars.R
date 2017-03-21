@@ -5,7 +5,10 @@
 #' The data search was performd on Monday, March 13, 2017 from sumobrain.com, and the exact
 #' search term was: 
 #' 
-#' \code{ABST/"autonomous" AN/(Apple* OR Google* OR Waymo* OR Tesla* OR Ford* OR General*) PD/12/13/1790->3/13/2017}
+#' \code{ABST/"autonomous" AN/(Apple* OR Google* OR Waymo* OR Tesla*} 
+#' 
+#' \code{OR Ford* OR General*) PD/12/13/1790->3/13/2017}
+#' 
 #' View the search \href{http://www.sumobrain.com/result.html?p=1&stemming=on&sort=chron&uspat=on&usapp=on&eupat=on&jp=on&pct=on&collections=&srch=xprtsrch&date_range=all&hits=502&from_ss=&srch_id=&srch_name=&search_name=&selected_doc_flag=&selected_newdoc_flag=&selected_portfolio=&portfolio_name=&query_txt=ABST\%2F\%22autonomous\%22+AN\%2F\%28Apple*+OR+Google*+OR+Waymo*+OR+Tesla*+OR+Ford*+OR+General*\%29+PD\%2F12\%2F13\%2F1790-\%3E3\%2F13\%2F2017&search.x=0&search.y=0&search=search_ezy}{here}.
 #' 
 #' 
@@ -28,7 +31,7 @@
 #' \describe{
 #' \item{docNum}{A published document number including the kind code, publication number,
 #' and kind code for the patent document.}
-#' \item{docType}{Very similar to the country code, with minor additions, USAPP being the 
+#' \item{docTypeSumobrain}{Very similar to the country code, with minor additions, USAPP being the 
 #' most noticable difference. }
 #' \item{pubDate}{Publication Date}
 #' \item{title}{Title}
@@ -62,6 +65,8 @@
 #' You process the raw data with the following commands:
 #' 
 #' \code{temp <- system.file("extdata", "google_autonomous_search.csv", package = "patentr")}
+#' 
+#' \code{# from the source package you can navigate to }
 #' 
 #' \code{temp <- read.csv("inst/extdata/google_autonomous_search.csv", skip = 1, stringsAsFactors = FALSE)}
 #' 
@@ -154,22 +159,22 @@
 #' Multiple application separated by a double semi-colon.}
 #' \item{title}{The title of the document.}
 #' \item{assignee}{The name of the applicant(s) at the time of filing.}
-#' \item{\code{inventors}}{The inventor(s).}
-#' \item{\code{lensURL}}{The lens.org URL for the document.}
-#' \item{\code{docTypeLens}}{A lens.org mapping of the doc type. 
+#' \item{inventors}{The inventor(s).}
+#' \item{lensURL}{The lens.org URL for the document.}
+#' \item{docTypeLens}{A lens.org mapping of the doc type. 
 #' Granted, application, ambiguous, unknown, search report, and possibly more values.}
-#' \item{\code{hasFullText}}{A logical value to show if there is a full text available from lens.org}
-#' \item{\code{citeCount}}{The number of times this document is cited, also known as forward citations.}
-#' \item{\code{familySimpleCount}}{The number of unique documents in the immediate patent family.}
-#' \item{\code{familyExtendedCount}}{The number of unique documents sharing a priority applicaiton in the extended family.}
-#' \item{\code{seqCount}}{Used in biological applications -- the number of sequences in the application.}
-#' \item{\code{cpcClasses}}{The CPC classification codes, separated by a double semi-colon.}
-#' \item{\code{ipcrClasses}}{The IPCR classification codes, separated by a double semi-colon.}
-#' \item{\code{usClasses}}{The US classification codes, separated by a double semi-colon.}
-#' \item{\code{pubmedID}}{A pubmed ID to any related research.}
-#' \item{\code{DOI}}{A digital object identifier. 
+#' \item{hasFullText}{A logical value to show if there is a full text available from lens.org}
+#' \item{citeCount}{The number of times this document is cited, also known as forward citations.}
+#' \item{familySimpleCount}{The number of unique documents in the immediate patent family.}
+#' \item{familyExtendedCount}{The number of unique documents sharing a priority applicaiton in the extended family.}
+#' \item{seqCount}{Used in biological applications -- the number of sequences in the application.}
+#' \item{cpcClasses}{The CPC classification codes, separated by a double semi-colon.}
+#' \item{ipcrClasses}{The IPCR classification codes, separated by a double semi-colon.}
+#' \item{usClasses}{The US classification codes, separated by a double semi-colon.}
+#' \item{pubmedID}{A pubmed ID to any related research.}
+#' \item{DOI}{A digital object identifier. 
 #' Go to doi.org and paste the value to get the associated research paper.}
-#' \item{\code{npl}}{Non-patent literature, or citations of non-patent sources.
+#' \item{npl}{Non-patent literature, or citations of non-patent sources.
 #' Separated with double semi-colons.}
 #' 
 #' 

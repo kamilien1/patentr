@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanPatentData.R
 \name{showDups}
 \alias{showDups}
-\title{View all your duplicate entries to decide which to remove.}
+\title{View all your duplicate entries to decide which to remove}
 \usage{
 showDups(input)
 }
@@ -32,7 +32,7 @@ granted patent.
 \examples{
 
 acarsDups <- acars[showDups(acars$appNum),]
-head(acarsDups[order(acarsDups$appNum),c("docNum","docType","appNum")])
+head(acarsDups[order(acarsDups$appNum),c("docNum","docTypeSumobrain","appNum")])
 
 }
 \seealso{

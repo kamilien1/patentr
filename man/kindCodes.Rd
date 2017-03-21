@@ -22,6 +22,8 @@ change after a certain date, so pay attention to \code{dateStarted} and \code{da
 published document is expected to have a duplicate publication. For example, USB2 is 
 a granted patent that has an application that was also published, whereas USB1 has no 
 previous documents published. This helps speed up the deduplication process. }
+\item{countryAndKindCode}{A concatenation of country code and kind code. Used in 
+the deduplication process and to determine the type of document.}
 }}
 \usage{
 kindCodes
@@ -60,7 +62,10 @@ To clean the data yourself:
 
 \code{temp$dateStarted <- as.Date(temp$dateStarted, origin = "1899-12-30")}
 
-See https://www.r-bloggers.com/date-formats-in-r/ for excel mac/windows and confirm this origin works for you by reviewing the source file
+\code{temp$countryAndKindCode <- with(temp,paste0(countryCode, kindCode))}
+
+See \url{https://www.r-bloggers.com/date-formats-in-r/} for excel mac/windows 
+and confirm this origin works for you by reviewing the source file.
 
 View the data sources:
 \enumerate{

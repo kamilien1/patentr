@@ -32,8 +32,11 @@
 #' 
 #' \code{temp$dateStarted <- as.Date(temp$dateStarted, origin = "1899-12-30")}
 #' 
+#' \code{temp$countryAndKindCode <- with(temp,paste0(countryCode, kindCode))}
 #' 
-#' See https://www.r-bloggers.com/date-formats-in-r/ for excel mac/windows and confirm this origin works for you by reviewing the source file
+#' 
+#' See \url{https://www.r-bloggers.com/date-formats-in-r/} for excel mac/windows 
+#' and confirm this origin works for you by reviewing the source file.
 #' 
 #' View the data sources:
 #' \enumerate{
@@ -69,7 +72,10 @@
 #' published document is expected to have a duplicate publication. For example, USB2 is 
 #' a granted patent that has an application that was also published, whereas USB1 has no 
 #' previous documents published. This helps speed up the deduplication process. }
+#' \item{countryAndKindCode}{A concatenation of country code and kind code. Used in 
+#' the deduplication process and to determine the type of document.}
 #' }
+#' 
 #' 
 #' 
 "kindCodes"
@@ -82,6 +88,7 @@
 #' A simple table that helps map the country code and length of the numeric portion 
 #' of the data to the type of document.
 #' 
+#' May need to add the USAPP for sumobrain. For now it is not needed. 
 #' 
 #' @name docLengthTypes
 #' @docType data
@@ -353,3 +360,273 @@
 
 
 
+#' A named vector of key/value pairs for country codes and publication number 
+#' document lengths used to determine the type of document.
+#'
+#'
+#' A named vector of key/value pairs for country codes and publication number 
+#' document lengths used to determine the type of document.
+#'
+#'
+#' @name docLengthTypesDict
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A named character vector
+#'
+#' \describe{
+#' \item{docLengthTypesDict}{A named character vector representing key/value pairs
+#' of doc lengths, country codes, and type of patent document.}
+#'
+#' }
+#'
+#' Built with the following code: 
+#' 
+#' \code{docLengthTypesDict <- docLengthTypes$value}
+#' 
+#' \code{names(docLengthTypesDict) <- docLengthTypes$key}
+#'
+#' @seealso
+#' \code{\link{generateDocType}}, \code{\link{docLengthTypes}}
+#' 
+"docLengthTypesDict"
+
+
+#' A country and kind code dictionary.
+#'
+#'
+#' A named vector of key/value pairs for country codes and kind codes used to 
+#' determine the type of document. 
+#'
+#'
+#' @name cakcDict
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A named character vector
+#'
+#' \describe{
+#' \item{cakcDict}{A named character vector representing key/value pairs
+#' of country codes, kind codes, and type of patent document.}
+#'
+#' }
+#'
+#' Built with the following code: 
+#' 
+#' \code{cakcDict <- kindCodes$docType}
+#' 
+#' \code{names(cakcDict) <- kindCodes$countryAndKindCode}
+#'
+#' @seealso
+#' \code{\link{generateDocType}}, \code{\link{kindCodes}}
+#' 
+"cakcDict"
+
+
+
+
+
+#' A simple stop word list for assignee names.
+#'
+#'
+#' A character vector of common stop words to remove from assignee names for 
+#' name standardization, such as "inc".
+#'
+#'
+#' @name assigneeStopWords
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector
+#'
+#' \describe{
+#' \item{assigneeStopWords}{A character vector of stop words.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanNames}}
+#' 
+"assigneeStopWords"
+
+
+#' A simple list of date column names in sumobrain data.
+#'
+#'
+#' A character vector of date fields in sumobrain data.
+#'
+#'
+#' @name sumobrainDateFields
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector
+#'
+#' \describe{
+#' \item{sumobrainDateFields}{A character vector of date fields.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanHeaderNames}}
+#' 
+"sumobrainDateFields"
+
+
+#' A simple list of date column names in lens.org data.
+#'
+#'
+#' A character vector of date fields in lens.org data.
+#'
+#'
+#' @name lensDateFields
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector.
+#'
+#' \describe{
+#' \item{lensDateFields}{A character vector of date fields.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanHeaderNames}}
+#' 
+"lensDateFields"
+
+#' A simple list of date column names in Google patent data.
+#'
+#'
+#' A character vector of date fields in Google patent data.
+#'
+#'
+#' @name googleDateFields
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector.
+#'
+#' \describe{
+#' \item{googleDateFields}{A character vector of date fields.}
+#' }
+#'
+#' @seealso
+#' \code{\link{cleanHeaderNames}}
+#' 
+"googleDateFields"
+
+
+#' Date order for sumobrain data.
+#'
+#'
+#' A date order to be used in sumobrain date data.
+#'
+#'
+#' @name sumobrainDateOrder
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character value.
+#'
+#' \describe{
+#' \item{sumobrainDateOrder}{A character variable of date order.}
+#' }
+#'
+#' @seealso
+#' \code{\link{extractCleanDate}}
+#' 
+"sumobrainDateOrder"
+
+#' Date order for lens.org data.
+#'
+#'
+#' A date order to be used in lens.org date data.
+#'
+#'
+#' @name lensDateOrder
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character value.
+#'
+#' \describe{
+#' \item{lensDateOrder}{A character variable of date order.}
+#' }
+#'
+#' @seealso
+#' \code{\link{extractCleanDate}}
+#' 
+"lensDateOrder"
+
+#' Date order for Google Patents data.
+#'
+#'
+#' A date order to be used in Google patent date data.
+#'
+#'
+#' @name googleDateOrder
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character value.
+#'
+#' \describe{
+#' \item{googleDateOrder}{A character variable of date order.}
+#' }
+#'
+#' @seealso
+#' \code{\link{extractCleanDate}}
+#' 
+"googleDateOrder"
+
+
+
+#' Score colors used in graphing.
+#'
+#'
+#' A character vector of Hexadecimal score colors.
+#'
+#'
+#' @name scoreColors
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector. 
+#'
+#' \describe{
+#' \item{scoreColors}{A character variable of four score colors for 0 to 3.}
+#' }
+#'
+#' @seealso
+#' \code{\link{flippedHistogram}}
+#' 
+"scoreColors"
+
+
+#' A standard list of words to exclude in a patent word cloud.
+#'
+#'
+#' A standard list of words to exclude from a patent data word cloud.
+#'
+#'
+#' @name excludeWords
+#' @docType data
+#' @keywords data
+#'
+#'
+#' @format A character vector. 
+#'
+#' \describe{
+#' \item{excludeWords}{A character vector of words to exclude}
+#' }
+#'
+#' 
+"excludeWords"

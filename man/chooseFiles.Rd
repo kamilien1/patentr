@@ -15,6 +15,6 @@ Uses a popup window (Tk file dialog) to allow the user to choose a list of zero 
 \examples{
 \dontrun{
 filePaths <- chooseFiles()
-allData <- readIpExcel(filePaths)
+allData <- importPatentData(filePaths)
 }
 }
