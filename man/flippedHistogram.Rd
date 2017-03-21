@@ -4,7 +4,8 @@
 \alias{flippedHistogram}
 \title{Plot a flipped histogram with a fill value}
 \usage{
-flippedHistogram(df, xVal, fillVal, colors = patentr::scoreColors)
+flippedHistogram(df, xVal, fillVal, colors = patentr::scoreColors,
+  recolor = FALSE)
 }
 \arguments{
 \item{df}{The original data frame of patent data}
@@ -16,6 +17,9 @@ flippedHistogram(df, xVal, fillVal, colors = patentr::scoreColors)
 \item{colors}{A character vector of colors, the same length as the number of 
 unique values in the column of \code{xVal[,fillVal]}. Default set to 
 \code{scoreColors}}
+
+\item{recolor}{A logical allowing you to choose to recolor the plot if the 
+colors vector is not applicable to you. Default set to \code{FALSE}.}
 }
 \value{
 A plot
@@ -49,6 +53,10 @@ score[score<0] <- 0
 sumo$score <- score
 sumo$assigneeSmall <- strtrim(sumo$assigneeClean,12)
 flippedHistogram(sumo, "assigneeSmall","score",colors=scoreColors)
-
+flippedHistogram(subset(sumo, score > 0), "assigneeSmall","score",colors=scoreColors)
+flippedHistogram(subset(sumo, score > 2) ,"score","assigneeSmall",colors=scoreColors,
+recolor = TRUE)
+flippedHistogram(subset(sumo, score > 2) ,"assigneeSmall","docType",colors=scoreColors,
+recolor = TRUE)
 
 }

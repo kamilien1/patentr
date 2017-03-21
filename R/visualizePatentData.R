@@ -87,6 +87,8 @@ factorForGraph <- function(df, xVal, fillVal, decFill = TRUE){
 #' @param colors A character vector of colors, the same length as the number of 
 #' unique values in the column of \code{xVal[,fillVal]}. Default set to 
 #' \code{scoreColors}
+#' @param recolor A logical allowing you to choose to recolor the plot if the 
+#' colors vector is not applicable to you. Default set to \code{FALSE}.
 #' 
 #' @return A plot
 #' 
@@ -115,28 +117,64 @@ factorForGraph <- function(df, xVal, fillVal, decFill = TRUE){
 #' sumo$score <- score
 #' sumo$assigneeSmall <- strtrim(sumo$assigneeClean,12)
 #' flippedHistogram(sumo, "assigneeSmall","score",colors=scoreColors)
-#' 
+#' flippedHistogram(subset(sumo, score > 0), "assigneeSmall","score",colors=scoreColors)
+#' flippedHistogram(subset(sumo, score > 2) ,"score","assigneeSmall",colors=scoreColors,
+#' recolor = TRUE)
+#' flippedHistogram(subset(sumo, score > 2) ,"assigneeSmall","docType",colors=scoreColors,
+#' recolor = TRUE)
 #' 
 #' @export
 #' 
 #' 
-flippedHistogram <- function(df, xVal, fillVal, colors = patentr::scoreColors){
+flippedHistogram <- function(df, xVal, fillVal, colors = patentr::scoreColors,
+                             recolor = FALSE){
   
   # order the graph appropriately  
   df <- factorForGraph(df, xVal, fillVal)
 
-  ggplot(df, aes_string(x = xVal, fill = fillVal )) + 
+  # sanity check for colors
+  # score has a 
+  if (length(colors) != length(unique(df[,fillVal])) && recolor){
+    colors <- makeColors(length(unique(df[,fillVal])))
+  }
+  
+  plot <- ggplot(df, aes_string(x = xVal, fill = fillVal )) + 
     geom_bar() + 
     coord_flip() +
-    scale_fill_manual("Score", values= colors, drop = F) +
     theme(legend.position='bottom',
           axis.text = element_text(size=16),
           axis.title = element_text(size=16),
           legend.text = element_text(size=12),
           legend.title = element_text(size=12))+
     xlab('') +
-    ylab("Document Count")
+    ylab("Document Count") +  
+    scale_fill_manual(gsub("^([[:alpha:]])", "\\U\\1", fillVal, perl=TRUE), 
+                                                values = colors, drop = F)
+  
+  return(plot)
   
 }
 
 
+#' Make color hues
+#' 
+#' @description Generate an evenly-spaced number of color hues.
+#'  
+#' Credit for this function goes to \href{http://stackoverflow.com/questions/8197559/emulate-ggplot2-default-color-palette}{John Colby's}
+#' Stack Overflow post.
+#' 
+#' @param numColors Number of colors, a numeric input.
+#'  
+#' @return A character vector of colors. 
+#' 
+#' @examples 
+#' makeColors(5)
+#' 
+#' @export
+#' 
+#' @seealso \code{\link{flippedHistogram}}
+#' 
+makeColors <- function(numColors){
+  hues = seq(15, 375, length = numColors + 1)
+  grDevices::hcl(h = hues, l = 65, c = 100)[1:numColors]
+}

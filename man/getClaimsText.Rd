@@ -20,6 +20,7 @@ This is a wrapper function for the \code{\link{getClaimFromURL}} function.
 }
 \examples{
 
+\dontrun{
 cc <- extractCountryCode(acars$docNum)
 pn <- extractPubNumber(acars$docNum)
 kc <- extractKindCode(acars$docNum)
@@ -27,7 +28,7 @@ urls <- createGoogleURL(countryCode = cc, pubNum = pn ,kindCode = kc)
 urls <- urls[1:4]
 clms <- getClaimsText(urls)
 clms[1]
-
+}
 }
 \seealso{
 \code{\link{createGoogleURL}}, \code{\link{cleanGoogleURL}},
