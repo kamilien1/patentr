@@ -20,22 +20,22 @@ Format: Country code, application number, A = application or P = provisional, YY
 Multiple application separated by a double semi-colon.}
 \item{title}{The title of the document.}
 \item{assignee}{The name of the applicant(s) at the time of filing.}
-\item{\code{inventors}}{The inventor(s).}
-\item{\code{lensURL}}{The lens.org URL for the document.}
-\item{\code{docTypeLens}}{A lens.org mapping of the doc type. 
+\item{inventors}{The inventor(s).}
+\item{\lensURL}{The lens.org URL for the document.}
+\item{docTypeLens}{A lens.org mapping of the doc type. 
 Granted, application, ambiguous, unknown, search report, and possibly more values.}
-\item{\code{hasFullText}}{A logical value to show if there is a full text available from lens.org}
-\item{\code{citeCount}}{The number of times this document is cited, also known as forward citations.}
-\item{\code{familySimpleCount}}{The number of unique documents in the immediate patent family.}
-\item{\code{familyExtendedCount}}{The number of unique documents sharing a priority applicaiton in the extended family.}
-\item{\code{seqCount}}{Used in biological applications -- the number of sequences in the application.}
-\item{\code{cpcClasses}}{The CPC classification codes, separated by a double semi-colon.}
-\item{\code{ipcrClasses}}{The IPCR classification codes, separated by a double semi-colon.}
-\item{\code{usClasses}}{The US classification codes, separated by a double semi-colon.}
-\item{\code{pubmedID}}{A pubmed ID to any related research.}
-\item{\code{DOI}}{A digital object identifier. 
+\item{hasFullText}{A logical value to show if there is a full text available from lens.org}
+\item{citeCount}{The number of times this document is cited, also known as forward citations.}
+\item{familySimpleCount}{The number of unique documents in the immediate patent family.}
+\item{familyExtendedCount}{The number of unique documents sharing a priority applicaiton in the extended family.}
+\item{seqCount}{Used in biological applications -- the number of sequences in the application.}
+\item{cpcClasses}{The CPC classification codes, separated by a double semi-colon.}
+\item{ipcrClasses}{The IPCR classification codes, separated by a double semi-colon.}
+\item{usClasses}{The US classification codes, separated by a double semi-colon.}
+\item{pubmedID}{A pubmed ID to any related research.}
+\item{DOI}{A digital object identifier. 
 Go to doi.org and paste the value to get the associated research paper.}
-\item{\code{npl}}{Non-patent literature, or citations of non-patent sources.
+\item{npl}{Non-patent literature, or citations of non-patent sources.
 Separated with double semi-colons.}
 
 
