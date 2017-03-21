@@ -21,7 +21,7 @@ Multiple application separated by a double semi-colon.}
 \item{title}{The title of the document.}
 \item{assignee}{The name of the applicant(s) at the time of filing.}
 \item{inventors}{The inventor(s).}
-\item{\lensURL}{The lens.org URL for the document.}
+\item{lensURL}{The lens.org URL for the document.}
 \item{docTypeLens}{A lens.org mapping of the doc type. 
 Granted, application, ambiguous, unknown, search report, and possibly more values.}
 \item{hasFullText}{A logical value to show if there is a full text available from lens.org}
