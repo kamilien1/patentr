@@ -38,6 +38,8 @@
 #' 
 #' @examples
 #' cleanData <- cleanHeaderNames(patentData = acars)
+#' cleanDataLens <- cleanHeaderNames(patentData = acarsLens, 
+#' columnsExpected = lensColumns, cleanNames = lensNames)
 #' 
 #' @export
 #' 
@@ -238,51 +240,12 @@ extractCleanDate <- function(dateVector, orders="ymd"){
 
 
 
-#' Create a URL link to Google patents. 
-#' 
-#' @description Create a URL string to link you to Google Patents. 
-#' 
-#' By concatenating the country code, publication number, and kind code, you can
-#' generate a URL to link you to google patents for further exploration. This 
-#' feature is especially useful when browsing the data in a spreadsheet or in 
-#' a Shiny app. It is also useful for extracting data from the HTML content. 
-#' 
-#' As each website (Google, lens.org, sumobrain.com, etc..) has a different 
-#' method for generating patent URLs, these functions are website-specific. 
-#' 
-#' The original Google patents version still works as of March 2017 and the 
-#' \code{googleURL} value is  \code{https://www.google.com/patents/}. This older 
-#' version may be easier to extract data. 
-#' 
-#' @param countryCode A character vector of the country code of the document. 
-#' Typically a two-letter character. 
-#' @param pubNum A character vector of the numeric portion of a publication number.
-#' @param kindCode character vector of the kind code of a document. If not available,
-#' enter a blank string "".
-#' @param googleURL A character string of the URL to Google Patents, with working
-#' default value. 
-#' 
-#' @return A character vector of properly formatted URL strings. 
-#' 
-#' @examples 
-#' acars$kindCode <- extractKindCode(acars$docNum)
-#' acars$pubName <- extractPubNumber(acars$docNum)
-#' acars$googleURL <- createGoogleURL(countryCode = acars$countryCode, 
-#' pubNum = acars$pubNum, kindCode =acars$kindCode)
-#' head(acars$googleURL)
-#' 
-#' @export
-createGoogleURL <- function(countryCode, pubNum, kindCode, googleURL = "https://patents.google.com/patent/"){
-  # create the URL 
-  paste(googleURL, countryCode, pubNum, kindCode,  sep='')  
-  # TODO: validate the URL
-  # http://stackoverflow.com/questions/28527100/check-if-https-hypertext-transfer-protocol-secure-url-is-valid
-}
 
 
 
 
-#' View all your duplicate entries to decide which to remove.
+
+#' View all your duplicate entries to decide which to remove
 #' 
 #' @description Return a logical vector of all duplicate entries. 
 #' 
@@ -320,7 +283,7 @@ showDups <- function(input){
 }
 
 
-#' Remove duplicate entries in a patent data set. 
+#' Remove duplicate entries in a patent data set 
 #' 
 #' @description Remove duplicate values in the patent data. Typically you will 
 #' want to check if you have repeat document numbers. A document number should be 
@@ -417,7 +380,7 @@ removeDups <- function(input, hasDup = NA, docType = NA, keepType = "grant"){
 
 
 
-#' Calculate the type of document
+#' Determine the patent document type
 #' 
 #' @description Determine the type of document from the patent publication data. 
 #' 
@@ -687,9 +650,10 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
     patentData$countryCode <- extractCountryCode(patentData$docNum) # country code 
     patentData$pubNum <- extractPubNumber(patentData$docNum)
     # if kind code exists, trust that it is accurate and don't reinvent the wheel
-    if(is.null(patentData$kindCode)){
-      patentData$kindCode <- extractKindCode(patentData$docNum)
-    }
+    #if(is.null(patentData$kindCode)){
+    # remove if statement for now, force a new kind code
+    patentData$kindCode <- extractKindCode(patentData$docNum)
+    #}
     patentData$officeDocLength <- extractDocLength(countryCode = patentData$countryCode,
                                                    pubNum = patentData$pubNum)
     # print("patent data office doc length in main func")
@@ -718,7 +682,13 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
       if(sum(!toKeep)>0) {print(paste("Removing",sum(!toKeep),"duplicated (grant, app, etc. matching pairs) rows."))}
       patentData <- patentData[toKeep,]
     }
-
+    # make the google URL
+    patentData$googleURL <- createGoogleURL(countryCode = patentData$countryCode,
+                                            pubNum = patentData$pubNum,
+                                            kindCode = patentData$kindCode)
+    
+    
+  # end if is.null docNum
   }
   
   # if dateFields exist, turn them into dates
@@ -734,9 +704,15 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
                                            stopWords = stopWords)
   }
   
+  
+
+  
+  
+  
   return(patentData)
 }
 # test 1, names should match
 # test 2, docNum extracted values behave nicely
 # test 3, dedup is behaving nicely
+
 

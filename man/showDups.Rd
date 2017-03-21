@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanPatentData.R
 \name{showDups}
 \alias{showDups}
-\title{View all your duplicate entries to decide which to remove.}
+\title{View all your duplicate entries to decide which to remove}
 \usage{
 showDups(input)
 }

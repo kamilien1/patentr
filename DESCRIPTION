@@ -11,7 +11,9 @@ LazyData: true
 Imports: readxl (>= 0.1.1),
 	plyr (>= 1.8.4),
 	stringr (>= 1.2.0),
-	lubridate (>= 1.6.0)
+	lubridate (>= 1.6.0),
+	XML (>= 3.98-1.5),
+	httr (>= 1.2.1)
 Suggests: testthat,
 	rprojroot
 Remotes: tidyverse/readxl

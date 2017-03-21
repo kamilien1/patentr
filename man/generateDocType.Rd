@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanPatentData.R
 \name{generateDocType}
 \alias{generateDocType}
-\title{Calculate the type of document}
+\title{Determine the patent document type}
 \usage{
 generateDocType(officeDocLength, countryAndKindCode,
   cakcDict = patentr::cakcDict,

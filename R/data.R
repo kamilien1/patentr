@@ -35,7 +35,8 @@
 #' \code{temp$countryAndKindCode <- with(temp,paste0(countryCode, kindCode))}
 #' 
 #' 
-#' See https://www.r-bloggers.com/date-formats-in-r/ for excel mac/windows and confirm this origin works for you by reviewing the source file
+#' See \url{https://www.r-bloggers.com/date-formats-in-r/} for excel mac/windows 
+#' and confirm this origin works for you by reviewing the source file.
 #' 
 #' View the data sources:
 #' \enumerate{
@@ -87,6 +88,7 @@
 #' A simple table that helps map the country code and length of the numeric portion 
 #' of the data to the type of document.
 #' 
+#' May need to add the USAPP for sumobrain. For now it is not needed. 
 #' 
 #' @name docLengthTypes
 #' @docType data

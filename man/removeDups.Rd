@@ -2,7 +2,7 @@
 % Please edit documentation in R/cleanPatentData.R
 \name{removeDups}
 \alias{removeDups}
-\title{Remove duplicate entries in a patent data set.}
+\title{Remove duplicate entries in a patent data set}
 \usage{
 removeDups(input, hasDup = NA, docType = NA, keepType = "grant")
 }

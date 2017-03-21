@@ -21,4 +21,7 @@ docLengthTypes
 A simple table that helps map the country code and length of the numeric portion 
 of the data to the type of document.
 }
+\details{
+May need to add the USAPP for sumobrain. For now it is not needed.
+}
 \keyword{data}
