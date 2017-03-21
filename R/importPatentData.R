@@ -13,11 +13,11 @@
 #' file1 <- system.file("extdata/", "sumobrain_autonomous_search1.xls", package="patentr")
 #' file2 <- system.file("extdata/", "sumobrain_autonomous_search2.xls", package="patentr")
 #' files <- list(file1, file2)
-#' ipData <- readPatentData(rawDataFilePath = files, skipLines = 1)
+#' ipData <- importPatentData(rawDataFilePath = files, skipLines = 1)
 #' 
 #' # example 2
 #' # assume csv files are in the data folder
-#' ipData <- readPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
+#' ipData <- importPatentData(rawDataFilePath = list.files('data/', full.names=T), skipLines = 1)
 #' }
 #' 
 #' 
