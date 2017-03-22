@@ -42,11 +42,16 @@
 #' \enumerate{
 #' \item{\href{https://www.uspto.gov/learning-and-resources/support-centers/electronic-business-center/kind-codes-included-uspto-patent}{USPTO kind codes}}
 ### Note I had to add a backslash after the % symbol, or else devtools throws a warning. 
-#' \item{\href{https://worldwide.espacenet.com/help?locale=en_EP&method=handleHelpTopic&topic=kindcodes\%5C}{EPO file histories}}
 #' \item{\href{https://www.cas.org/content/references/patkind}{CAS list of kind codes}}
 #' \item{\href{http://ipbookcompanion.org/links/pk_codes.pdf}{IP Book kind codes}}
 #' \item{\href{http://www.thomsonfilehistories.com/docs/RESOURCES_Kind\%20Codes\%20by\%20Country.pdf}{Thomson File Histories}}
 #' }
+#' For esp@cenet at the EPO, try the following link:
+#' \code{https://worldwide.espacenet.com/help?locale=en_EP&method=}
+#' \code{handleHelpTopic&topic=kindcodes\%5C}
+#' 
+#' 
+#' 
 #' 
 #' 
 #' @name kindCodes

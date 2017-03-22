@@ -1,6 +1,6 @@
 Package: patentr
 Title: A Toolbox for Analyzing Patent Data
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(person("Bojanczyk", "Kamil", email = "kamil.bojanczyk@gmail.com", role = c("aut", "cre")),
     person("Yang", "Yao", email = "yangyaonju@gmail.com", role = "aut"))
 Description: A toolkit for patent data analysis. 
@@ -23,7 +23,5 @@ Imports: readxl (>= 0.1.1),
 	ReporteRs (>= 0.8.8)
 Suggests: testthat,
 	rprojroot
-Remotes: github::tidyverse/readxl
-Additional_repositories: https://github.com/tidyverse/readxl
 RoxygenNote: 6.0.1
 BugReports: http://github.com/kamilien1/patentr/issues

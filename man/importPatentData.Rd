@@ -23,8 +23,8 @@ Future use: can read from a URL, an xlsx file, google doc, and a csv.
 \dontrun{
 
 # access the files here and put them in a data/ folder of your working directory.
-file1 <- system.file("extdata/", "sumobrain_autonomous_search1.xls", package="patentr")
-file2 <- system.file("extdata/", "sumobrain_autonomous_search2.xls", package="patentr")
+file1 <- system.file("extdata/", "sumobrain_autonomous_search1.xlsx", package="patentr")
+file2 <- system.file("extdata/", "sumobrain_autonomous_search2.xlsx", package="patentr")
 files <- list(file1, file2)
 ipData <- importPatentData(rawDataFilePath = files, skipLines = 1)
 
