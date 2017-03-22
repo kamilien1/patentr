@@ -313,9 +313,7 @@ addFullImagePptx <- function(ppt, plot, slide_layout = "Title and Content",
   
   return(ppt)
 
-
 }
-
 
 
 #' Make a PDF output of a plot
