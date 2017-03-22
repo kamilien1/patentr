@@ -39,6 +39,8 @@ patents.
   + Browse through the **many example plots** 
   + Download your charts locally as a **PDF** or make your own **PPTX** 
 
+**Note:** The Shiny app works only with `xlsx` data. Simply upload the data file,
+click "clean", and then you can view a straightforward graph and the raw data.
 
 There are three core date sets available, all based on autonomous car patent sets:
 `acars` (from Sumobrain.com), `acarsLens`, and `acarsGoogle`. All data sets are 
