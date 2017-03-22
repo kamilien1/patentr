@@ -1,5 +1,5 @@
 # test graphics
-
+## kamil bojanczyk start
 # svg("tests/testthat/testData/sb0.svg")
 # flippedHistogram(subset(sumo, score > 0), "assigneeSmall","score",colors=scoreColors)
 # dev.off()
@@ -129,3 +129,4 @@ test_that("tilePlot plots makes a plot object",{
 
 
 
+## kamil bojanczyk end

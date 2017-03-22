@@ -1,3 +1,4 @@
+## kamil bojanczyk start
 #' A kind codes database to show the type of document for each patent document.
 #'
 #' Patent documents have associated kind codes, which are letter/number code 
@@ -569,6 +570,8 @@
 #' 
 "lensDateOrder"
 
+## kamil bojanczyk end
+## yang yao start
 #' Date order for Google Patents data.
 #'
 #'
@@ -635,3 +638,4 @@
 #'
 #' 
 "excludeWords"
+## yang yao end

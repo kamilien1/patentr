@@ -22,11 +22,22 @@ The patentr package provides four categories of important functions:
 \item Visualization & reporting
 }
 }
-\section{patentr functions}{
+\section{load functions}{
 
 
 \code{\link{importPatentData}}: Import xls patent data from filepaths.
-\code{\link{chooseFiles}}: Uses a popup window (Tk file dialog) to allow the user to choose a list of zero or more files interactively.
+\code{\link{chooseFiles}}: Uses a popup window (Tk file dialog) to 
+allow the user to choose a list of zero or more files interactively.
+}
+
+\section{clean functions}{
+
+
+\code{\link{cleanHeaderNames}}, \code{\link{extractCountryCode}},
+\code{\link{extractPubNumber}}, \code{\link{extractKindCode}},
+\code{\link{extractDocLength}}, \code{\link{extractCleanDate}}, 
+\code{\link{showDups}}, \code{\link{removeDups}}, \code{\link{generateDocType}}, 
+\code{\link{cleanNames}}, \code{\link{cleanPatentData}}
 }
 
 \section{patentr data}{

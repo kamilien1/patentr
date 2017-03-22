@@ -1,3 +1,4 @@
+## kamil bojanczk start
 #' Generate a standard set of header names for import data
 #' 
 #' @description Create a standard nameset from Sumobrain import data. 
@@ -530,7 +531,8 @@ cleanNames <- function(rawNames, firstAssigneeOnly = TRUE, sep = ";",
   return(rawNames)
 }
 
-
+## kamil bojanczk end
+## yang yao start
 #' Generate a clean data set from the imported raw data. 
 #' 
 #' @description Generate a clean data set from the imported raw data set. The 
@@ -716,3 +718,5 @@ cleanPatentData <- function(patentData=NULL, columnsExpected, cleanNames, dateFi
 # test 3, dedup is behaving nicely
 
 
+
+## yang yao end

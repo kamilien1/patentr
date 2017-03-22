@@ -1,3 +1,4 @@
+## kamil bojanczyk start
 # visualize patent data 
 
 
@@ -492,3 +493,4 @@ wordCloudIt <- function(file, rmwords,minfreq = 20,maxwords=150, ...) {
 
 
 
+## kamil bojanczyk end
