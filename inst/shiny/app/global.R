@@ -1,5 +1,6 @@
 ##This should detect and install missing packages before loading them  
-
+## yang yao and kamil bojanczyk
+## motivation: R Shiny gallery and look at urls in ui.R
 list.of.packages <- c("shiny","ggplot2", "dplyr")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)

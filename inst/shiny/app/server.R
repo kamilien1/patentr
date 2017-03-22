@@ -1,5 +1,9 @@
+## yang yao 
+## motivation: R Shiny gallery and look at urls in ui.R
 library(shiny)
 
+
+## kamil bojanczyk start
 function(input, output) {
   #read in file as rawdata
   rawData <- reactive({
@@ -18,7 +22,7 @@ function(input, output) {
       readxl::read_excel(paste(inFile$datapath, ext, sep="."), 1)
     }
   })
-  
+  ## kamil bojanczyk end 
   #show raw data in a table
   output$contents <- renderTable({rawData()})
   
@@ -73,3 +77,5 @@ function(input, output) {
 
 
 
+## yang yao 
+## motivation: R Shiny gallery and look at urls in ui.R

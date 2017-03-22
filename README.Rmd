@@ -2,7 +2,7 @@
 output: github_document
 title: "patentr"
 date: "`r Sys.Date()`"
-author: "Kamil Bojanczyk"
+author: "Kamil Bojanczyk, Yao Yang"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
