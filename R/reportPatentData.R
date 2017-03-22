@@ -199,7 +199,7 @@ summaryText <- function(df, singular, plural, sumVar){
 #' # ReporteRs::writeDoc(ppt, out)
 #' 
 #' 
-#' @seealso \code{\link[ReporteRs]{pptx}}
+#' @seealso \code{\link[ReporteRs]{pptx}}, \code{\link{addFullImagePptx}}
 #' 
 #' 
 #' @export
@@ -226,6 +226,137 @@ addChartRightTextLeftPptx <- function(ppt, plot, text, title, slide_layout = "Ti
 }
 
 
-# next function
+
+
+#' Add a full-sized plot image to a pptx
+#'
+#' @description Take a plot image from ggplot2 and size it to fit an entire
+#' slide.
+#'
+#' @param ppt A ppt object to add a slide to.
+#' @param plot A plot output object from ggplto2.
+#' @param slide_layout A character value, slide layout, default value is
+#' \code{"Title and Content"}.
+#' @param w Width in inches, default set to max width 13.3
+#' @param h Height in inches, default set to max height 7.5
+#'
+#'
+#' @return a pptx object. 
+#'
+#' @importFrom ReporteRs addSlide
+#' @importFrom ReporteRs addPlot
+#'
+#' @examples 
+#' sumo <- cleanPatentData(patentData = patentr::acars, columnsExpected = sumobrainColumns,
+#' cleanNames = sumobrainNames,
+#' dateFields = sumobrainDateFields,
+#' dateOrders = sumobrainDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE,
+#' assigneeSep = ";",
+#' stopWords = patentr::assigneeStopWords)
+#' 
+#' # note that in reality, you need a patent analyst to carefully score
+#' # these patents, the score here is for demonstrational purposes
+#' score <- round(rnorm(dim(sumo)[1],mean=1.4,sd=0.9))
+#' score[score>3] <- 3; score[score<0] <- 0
+#' sumo$score <- score
+#' sumo$assigneeSmall <- strtrim(sumo$assigneeClean,12)
+#' category <- c("system","control algorithm","product","control system", "communication")
+#' c <- round(rnorm(dim(sumo)[1],mean=2.5,sd=1.5))
+#' c[c>5] <- 5; c[c<1] <- 1
+#' sumo$category <- category[c]
+#' 
+#' xVal = "category"
+#' fillVal = "score"
+#' facetVal = "assigneeSmall"
+#' 
+#' fp <- facetPlot(subset(sumo, score > 0), xVal, fillVal, facetVal, colors = patentr::scoreColors,
+#'                 recolor = FALSE)
+#' 
+#' 
+#' 
+#' # create a ppt
+#' ppt <- ReporteRs::pptx(title="IP Update")
+#' # view the types of layouts available by default
+#' # slide.layouts(ppt)
+#' layoutTitleContent = "Title and Content"
+#' 
+#' fp <- facetPlot(subset(sumo, score > 0), xVal, fillVal, facetVal, colors = patentr::scoreColors,
+#'                 recolor = FALSE)
+#' ppt <- addFullImagePptx(ppt, plot = fp, slide_layout = layoutTitleContent)
+#' fp <- facetPlot(subset(sumo, score > 1), xVal, fillVal, facetVal, colors = patentr::scoreColors,
+#'                 recolor = FALSE)
+#' ppt <- addFullImagePptx(ppt, plot = fp, slide_layout = layoutTitleContent)
+#' fp <- facetPlot(subset(sumo, score > 2), xVal, fillVal, facetVal, colors = patentr::scoreColors,
+#'                 recolor = FALSE)
+#' ppt <- addFullImagePptx(ppt, plot = fp, slide_layout = layoutTitleContent)
+#' 
+#' 
+#' # find a data folder and write it out to your folder
+#' # out <- paste("data/",Sys.Date(),"_exampleChartRightTextLeft.pptx",sep='')
+#' # ReporteRs::writeDoc(ppt, out)
+#'
+#'
+#' @export
+#'
+#' @seealso \code{\link{addChartRightTextLeftPptx}}
+#'
+addFullImagePptx <- function(ppt, plot, slide_layout = "Title and Content",
+                             w = 13.3, h = 7.5){
+  ppt <- ReporteRs::addSlide(ppt, slide.layout = slide_layout)
+  ppt <- ReporteRs::addPlot(ppt, print, x = plot, offx = 0, offy = 0,
+                            width = w, height = h)
+  
+  return(ppt)
+
+
+}
+
+
+
+#' Make a PDF output of a plot
+#' 
+#' @description Make a PDF output of a plot.
+#' 
+#' @param graph The graph object to input
+#' @param name A character name to name your file. It can have a filepath as well.
+#' @param w The width, in inches, of your image, default set to 12.
+#' @param h The height, in inches, of your image, default set to 12.
+#' 
+#' 
+#' @return No ret
+#' 
+#' @examples
+#' 
+#' sumo <- cleanPatentData(patentData = patentr::acars, columnsExpected = sumobrainColumns,
+#' cleanNames = sumobrainNames,
+#' dateFields = sumobrainDateFields,
+#' dateOrders = sumobrainDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE,
+#' assigneeSep = ";",
+#' stopWords = patentr::assigneeStopWords)
+#' 
+#' # df <- dplyr::select(sumo, title, abstract)
+#' df <- sumo[,c("title","abstract")]
+#' addPdfImage(wordCloudIt(df, excludeWords, minfreq = 20,
+#'                         random.order = FALSE, rot.per = 0.25),"wordCloud")
+#' 
+#' @export
+#' 
+#' 
+addPdfImage <- function(graph,name = "image",w=12,h=12){
+  name <- paste(name,".pdf",sep='')
+  grDevices::pdf(name,width=w,height=h)
+  print(graph)
+  grDevices::dev.off()
+}
 
 

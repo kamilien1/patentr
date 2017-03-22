@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualizePatentData.R
 \name{wordCloudIt}
 \alias{wordCloudIt}
-\title{Generate a word cloude with a given subset of patent data fields.}
+\title{Generate a word cloud with a given subset of patent data fields.}
 \usage{
 wordCloudIt(file, rmwords, minfreq = 20, maxwords = 150, ...)
 }

@@ -417,7 +417,7 @@ tilePlot <- function(df, xVal, tileVal, fillVal = NA, xangle = 0, xhjust = 0.5,
 
 
 
-#' Generate a word cloude with a given subset of patent data fields. 
+#' Generate a word cloud with a given subset of patent data fields. 
 #' 
 #' @description Create a word cloud from a patent data set. 
 #' 
