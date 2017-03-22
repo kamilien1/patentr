@@ -1,3 +1,5 @@
+## yang yao 
+## motivation: R Shiny gallery and look at urls below
 library(shiny)
 
 fluidPage(
@@ -38,3 +40,6 @@ fluidPage(
     )
   )
 )
+
+## yang yao 
+## motivation: R Shiny gallery and look at urls below

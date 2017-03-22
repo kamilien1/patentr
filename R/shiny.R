@@ -7,6 +7,7 @@
 #' 
 #' @export
 
+## yang yao start
 runExample <- function() {
   appDir <- system.file("shiny", "app" ,package = "patentr")
   if (appDir == "") {
@@ -14,3 +15,4 @@ runExample <- function() {
   }
   shiny::runApp(appDir, display.mode = "normal")
 }
+## yang yao end
