@@ -3,7 +3,7 @@ Title: A Toolbox for Analyzing Patent Data
 Version: 0.0.0.9000
 Authors@R: c(person("Bojanczyk", "Kamil", email = "kamil.bojanczyk@gmail.com", role = c("aut", "cre")),
     person("Yang", "Yao", email = "yangyaonju@gmail.com", role = "aut"))
-Description: This package is a toolkit for patent data analysis. 
+Description: A toolkit for patent data analysis. 
 Depends: R (>= 3.3.2)
 License: GPL (> 2)
 Encoding: UTF-8
@@ -19,9 +19,11 @@ Imports: readxl (>= 0.1.1),
 	ggplot2 (>= 2.2.1),
 	RColorBrewer (>= 1.1-2),
 	tm (>= 0.7-1),
-	wordcloud (>= 2.5)
+	wordcloud (>= 2.5),
+	ReporteRs (>= 0.8.8)
 Suggests: testthat,
 	rprojroot
-Remotes: tidyverse/readxl
+Remotes: github::tidyverse/readxl
 Additional_repositories: https://github.com/tidyverse/readxl
 RoxygenNote: 6.0.1
+BugReports: http://github.com/kamilien1/patentr/issues
