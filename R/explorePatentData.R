@@ -10,6 +10,8 @@
 #' 
 #' @param df A data frame of patent data.
 #' @param names a character vector of header names that you want to summarize. 
+#' @param naOmit Logical. Optionally, remove NA values at the end of the summary.
+#' Useful when comparing fields that have NA values, such as features. 
 #' 
 #' @return A dataframe of summarize values.
 #' 
@@ -37,7 +39,7 @@
 #' # load library(ggplot2) for the below part to run
 #' # ggplot(scoreSum, aes(x=score, y = total, fill=factor(score) )) + geom_bar(stat="identity")
 #' nameAndScore <- summarizeColumns(sumo, c("assigneeClean","score"))
-#' tail(nameAndScore)
+#' # tail(nameAndScore)
 #' 
 #' @export
 #' 
@@ -47,7 +49,7 @@
 #' @importFrom dplyr n
 #' @importFrom magrittr %>%
 #' 
-summarizeColumns <- function(df, names){
+summarizeColumns <- function(df, names, naOmit = FALSE){
   
   # dplyr functions
   # as.symbol or as.name both work, unsure why
@@ -62,6 +64,11 @@ summarizeColumns <- function(df, names){
     dplyr::group_by_(.dots = names) %>% 
     dplyr::summarize(total=n())  %>% 
     dplyr::arrange(total)
+  
+  if(naOmit){
+    df <- df %>% 
+      stats::na.omit()
+  }
   return(df)
 }
 

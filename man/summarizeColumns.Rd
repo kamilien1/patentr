@@ -4,12 +4,15 @@
 \alias{summarizeColumns}
 \title{Summarize columns of a data frame}
 \usage{
-summarizeColumns(df, names)
+summarizeColumns(df, names, naOmit = FALSE)
 }
 \arguments{
 \item{df}{A data frame of patent data.}
 
 \item{names}{a character vector of header names that you want to summarize.}
+
+\item{naOmit}{Logical. Optionally, remove NA values at the end of the summary.
+Useful when comparing fields that have NA values, such as features.}
 }
 \value{
 A dataframe of summarize values.
@@ -44,6 +47,6 @@ scoreSum
 # load library(ggplot2) for the below part to run
 # ggplot(scoreSum, aes(x=score, y = total, fill=factor(score) )) + geom_bar(stat="identity")
 nameAndScore <- summarizeColumns(sumo, c("assigneeClean","score"))
-tail(nameAndScore)
+# tail(nameAndScore)
 
 }
