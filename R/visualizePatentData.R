@@ -417,4 +417,78 @@ tilePlot <- function(df, xVal, tileVal, fillVal = NA, xangle = 0, xhjust = 0.5,
 
 
 
+#' Generate a word cloude with a given subset of patent data fields. 
+#' 
+#' @description Create a word cloud from a patent data set. 
+#' 
+#' @param file The data frame you want word cloud, typically the abstract, title, 
+#' and claims subset.
+#' @param rmwords A character vector of words you exclude from your analysis. Default 
+#' is \code{\link{excludeWords}}. 
+#' @param minfreq From \code{\link[wordcloud]{wordcloud}}, the min frequency 
+#' to include a word. Default is 10.
+#' @param maxwords From \code{\link[wordcloud]{wordcloud}}, the max number of 
+#' words to show. Default is 150. 
+#' @param ... \code{\link[wordcloud]{wordcloud}} options
+#' 
+#' @examples 
+#' 
+#' sumo <- cleanPatentData(patentData = patentr::acars, columnsExpected = sumobrainColumns,
+#' cleanNames = sumobrainNames,
+#' dateFields = sumobrainDateFields,
+#' dateOrders = sumobrainDateOrder,
+#' deduplicate = TRUE,
+#' cakcDict = patentr::cakcDict,
+#' docLengthTypesDict = patentr::docLengthTypesDict,
+#' keepType = "grant",
+#' firstAssigneeOnly = TRUE,
+#' assigneeSep = ";",
+#' stopWords = patentr::assigneeStopWords)
+#' 
+#' # df <- dplyr::select(sumo, title, abstract)
+#' df <- sumo[,c("title","abstract")]
+#' wordCloudIt(df, excludeWords, minfreq = 20, 
+#' random.order = FALSE, rot.per = 0.25)
+#' 
+#' @return NULL, prints out a wordcloud
+#' 
+#' 
+#' @importFrom tm Corpus
+#' @importFrom tm VectorSource
+#' @importFrom tm tm_map
+#' @importFrom tm content_transformer
+#' @importFrom tm removePunctuation
+#' @importFrom tm removeWords
+#' @importFrom tm stopwords
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom wordcloud wordcloud
+#' 
+#' 
+#' 
+#' @export
+#' 
+# may need to use mc.cores
+wordCloudIt <- function(file, rmwords,minfreq = 20,maxwords=150, ...) {
+  
+  # take in the entire file
+  # so you better subset the columns to claim1 and whatever else
+  c <- tm::Corpus(tm::VectorSource(file))
+  # convert to ASCII to 'make it work'
+  c <- tm::tm_map(c,function(x) iconv(x, to='ASCII', sub='byte'))
+  # lower case results
+  c <- tm::tm_map(c,tolower)
+  # no punctuations !?.,
+  c <- tm::tm_map(c, tm::removePunctuation)
+  # no stop words! If the but as...
+  c <- tm::tm_map(c,function(x) tm::removeWords(x,tm::stopwords()))
+  # No claim words! See list above function
+  c <- tm::tm_map(c,function(x) tm::removeWords(x, rmwords))
+  # Make it pretty with 4 colors in the Dark2 palette
+  pal2 <- RColorBrewer::brewer.pal(4,"Dark2")
+  # take in additional functions if we want
+  wordcloud::wordcloud(c,min.freq = minfreq, max.words = maxwords, colors = pal2,...)
+  
+}
+
+
 
