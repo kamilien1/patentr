@@ -1,5 +1,5 @@
 # explore patent data, goes hand-in-hand with visualization
-
+## yang yao start
 
 #' Summarize columns of a data frame 
 #' 
@@ -74,3 +74,4 @@ summarizeColumns <- function(df, names, naOmit = FALSE){
 
 
 
+## yang yao end

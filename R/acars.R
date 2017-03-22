@@ -1,3 +1,4 @@
+## kamil bojanczyk start
 #' Autonomous Vehicle Patent Data from Sumobrain.com
 #'
 #' An example data set of autonomous vehicle IP from major assignees. 
@@ -106,6 +107,8 @@
 #' 
 "acarsGoogle"
 
+## kamil bojanczyk end
+## yang yao start
 #' Autonomous Vehicle Patent Data from Lens Patent Search
 #'
 #' An example data set of autonomous vehicle IP from major assignees. 
@@ -187,3 +190,4 @@
 #' \code{\link{acars}} provides a similar search from sumobrain. 
 #' 
 "acarsLens"
+## yang yao end

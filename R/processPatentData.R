@@ -1,3 +1,4 @@
+## kamil bojanczk start
 #' Create a URL link to Google patents
 #' 
 #' @description Create a URL string to link you to Google Patents. 
@@ -251,3 +252,4 @@ getClaimsText <- function(googleURLs, langCode="en",whichClaim=1){
 
 
 
+## kamil bojanczk end

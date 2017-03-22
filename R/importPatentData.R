@@ -1,3 +1,4 @@
+## kamil bojanczyk start
 #' Read in a data file or list of files from excel spreadsheets.
 #'
 #' @description Import, read, and connect patent data files. Currently: xls files
@@ -75,3 +76,4 @@ chooseFiles <- function() {
   files
 }
 
+## kamil bojanczyk end

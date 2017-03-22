@@ -1,5 +1,5 @@
 # reporting-related functions to generate ppt slides 
-
+## yang yao start
 
 
 
@@ -358,3 +358,4 @@ addPdfImage <- function(graph,name = "image",w=12,h=12){
 }
 
 
+## yang yao end
