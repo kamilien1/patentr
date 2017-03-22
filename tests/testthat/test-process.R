@@ -5,7 +5,7 @@
 
 # sumobrain data
 test_that("Sumobrain data has clean google URLS.",{
-  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = skipSumobrain)
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xlsx"), skipLines = skipSumobrain)
   df <- cleanPatentData(patentData = df, columnsExpected = sumobrainColumns,
                         cleanNames = sumobrainNames, dateFields = sumobrainDateFields,
                         dateOrders = sumobrainDateOrder, deduplicate = TRUE,
@@ -102,7 +102,7 @@ test_that("getClaimFromURL should return a character of length 1.",{
 
 
 test_that("getClaimsText reads in 3 urls and returns a character vector of length 3.",{
-  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xls"), skipLines = skipSumobrain)
+  df <- importPatentData(rprojroot::find_testthat_root_file("testData","sumobrain_autonomous_search1.xlsx"), skipLines = skipSumobrain)
   df <- cleanPatentData(patentData = df, columnsExpected = sumobrainColumns,
                         cleanNames = sumobrainNames, dateFields = sumobrainDateFields,
                         dateOrders = sumobrainDateOrder, deduplicate = TRUE,
