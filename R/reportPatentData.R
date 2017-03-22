@@ -226,4 +226,6 @@ addChartRightTextLeftPptx <- function(ppt, plot, text, title, slide_layout = "Ti
 }
 
 
+# next function
+
 
