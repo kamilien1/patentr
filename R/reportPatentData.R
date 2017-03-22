@@ -194,12 +194,12 @@ summaryText <- function(df, singular, plural, sumVar){
 #'                             title = "Categories and Scores",
 #'                             slide_layout = layoutTitleContent)
 #' 
-#' find a data folder and write it out to your folder
+#' # find a data folder and write it out to your folder
 #' # out <- paste("data/",Sys.Date(),"_exampleChartRightTextLeft.pptx",sep='')
 #' # ReporteRs::writeDoc(ppt, out)
 #' 
-
-
+#' 
+#' @seealso \code{\link[ReporteRs]{pptx}}
 #' 
 #' 
 #' @export
@@ -224,3 +224,6 @@ addChartRightTextLeftPptx <- function(ppt, plot, text, title, slide_layout = "Ti
   ppt <- ReporteRs::addTitle(ppt, title)
   ppt
 }
+
+
+
