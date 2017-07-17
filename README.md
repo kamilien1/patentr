@@ -1,6 +1,6 @@
 patentr
 ================
-Kamil Bojanczyk; Yao Yang
+Kamil Bojanczyk
 2017-03-22
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
